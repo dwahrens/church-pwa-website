@@ -1,0 +1,251 @@
+<section id="more" class="hero is-fullheight partial is-hidden">
+  <article class="content is-fluid is-fullhd">
+    <div class="tile is-parent">
+      <div class="tile is-child is-light box is-vertical">
+        <% if (user) { %>
+        <p class="has-text-centered">
+          <a class="button is-primary is-medium is-fullwidth spa" href="/public/user-profile">
+            <img class="is-white-icon image is-bottom-nav-image has-right-margin" src="/public/icons/svg/account.svg"
+              alt="Settings" /> Profile
+          </a>
+        </p>
+        <% } %>
+        <% if (user.is_admin) { %>
+        <p class="has-text-centered">
+          <a class="button is-primary is-medium is-fullwidth spa" href="/manage">
+            <img class="is-white-icon image is-bottom-nav-image has-right-margin" src="/public/icons/svg/settings.svg"
+              alt="Settings" />
+            Manage
+          </a>
+        </p>
+        <% } %>
+        <p class="has-text-centered">
+          <a class="button is-primary is-medium is-fullwidth spa" href="<%= sundayschool.url %>">
+            <img class="is-white-icon image is-bottom-nav-image has-right-margin" src="/public/icons/svg/sundayschool.svg"
+              alt="Sunday School" />
+            Sunday School Online
+          </a>
+        </p>
+        <p class="has-text-centered">
+          <a class="button is-primary is-medium is-fullwidth spa"
+            href="/public/daily-devos">
+            <img class="is-white-icon image is-bottom-nav-image has-right-margin" src="/public/icons/svg/daily-devo.svg"
+              alt="Daily Devotionals" />
+            Daily Devos
+          </a>
+        </p>
+        <p class="has-text-centered">
+          <a class="button is-primary is-medium is-fullwidth spa" target="_blank" href="https://www.simpsonpublishing.com/SCB.pdf">
+            <img class="is-white-icon image is-bottom-nav-image has-right-margin" src="/public/icons/svg/1689.svg"
+              alt="Shorter Catechism (a Baptist Version)" />
+            Shorter Catechism (Baptist)
+          </a>
+        </p>
+        <p class="has-text-centered">
+          <a class="button is-primary is-medium is-fullwidth spa" href="/public/1689">
+            <img class="is-white-icon image is-bottom-nav-image has-right-margin" src="/public/icons/svg/1689.svg"
+              alt="1689 London Baptist Confession" />
+            1689 Confession
+          </a>
+        </p>
+        <p class="has-text-centered">
+          <a class="button is-primary is-medium is-fullwidth spa" href="/public/1689">
+            <img class="is-white-icon image is-bottom-nav-image has-right-margin" src="/public/icons/svg/1689.svg"
+              alt="Spurgeon's Morning & Evening" />
+            Morning & Evening
+          </a>
+        </p>
+        <p class="has-text-centered">
+          <a class="button is-primary is-medium is-fullwidth spa" href="/public/events">
+            <img class="is-white-icon image is-bottom-nav-image has-right-margin" src="/public/icons/svg/date.svg"
+              alt="Events" />
+            Events
+          </a>
+        </p>
+        <p class="has-text-centered">
+          <a class="button is-primary is-medium is-fullwidth spa" href="/public/food-donations">
+            <img class="is-white-icon image is-bottom-nav-image has-right-margin" src="/public/icons/svg/basket.svg"
+              alt="Food Donations" />
+            Food Box Donations
+          </a>
+        </p>
+        <p class="has-text-centered">
+          <a id="showIosInstall" class="button is-primary is-medium is-fullwidth" href="#installIos">
+            <img class="is-white-icon image is-bottom-nav-image has-right-margin" src="/public/icons/svg/install.svg"
+              alt="Install on iOS" /> iPhone Install
+          </a>
+        </p>
+        <% if (!loggedIn) { %>
+        <p class="has-text-centered">
+          <a class="button is-primary is-medium is-fullwidth" href="/public/register">
+            <img class="is-white-icon image is-bottom-nav-image has-right-margin" src="/public/icons/svg/account.svg"
+              alt="Register" /> Register
+          </a>
+        </p>
+        <% } %>
+        <p class="has-text-centered">
+          <a class="button is-primary is-medium is-fullwidth spa" href="/public/faq">
+            <img class="is-white-icon image is-bottom-nav-image has-right-margin" src="/public/icons/svg/faq.svg"
+              alt="FAQ" /> Frequently Asked Questions
+          </a>
+        </p>
+        <p class="has-text-centered">
+          <a class="button is-primary is-medium is-fullwidth spa" href="/public/privacy-policy">
+            <img class="is-white-icon image is-bottom-nav-image has-right-margin" src="/public/icons/svg/privacy-policy.svg"
+              alt="Privacy Policy" /> Privacy Policy
+          </a>
+        </p>
+        <p class="has-text-centered">
+          <a class="button is-primary is-medium is-fullwidth spa" href="/public/terms-conditions">
+            <img class="is-white-icon image is-bottom-nav-image has-right-margin" src="/public/icons/svg/terms-conditions.svg"
+              alt="Terms and Conditions" /> Terms and Conditions
+          </a>
+        </p>
+        <% if (loggedIn) { %>
+        <p class="has-text-centered">
+          <a class="button is-primary is-medium is-fullwidth" href="/logout">
+            <img class="is-white-icon image is-bottom-nav-image has-right-margin" src="/public/icons/svg/logout.svg"
+              alt="Logout" /> Logout
+          </a>
+        </p>
+        <% } %>
+        <p class="has-text-centered">
+          Icons made by <a href="https://www.flaticon.com/authors/monkik" title="monkik">monkik</a> and <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></p>
+      </div>
+    </div>
+  </article>
+</section>
+<section>
+  <article>
+    <div id="iosModal" class="modal has-text-dark">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Install Church Website</p>
+          <button class="delete close-ios-modal" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <p class="image is-128x128 is-centered">
+            <img src="/public/icons/png/logo.png" alt="Church Website Install to iOS" width="20" height="15">
+          </p>
+          <p class="is-size-4">Install this application on your home screen for quick and easy access when you’re on
+            the go.</p>
+          <p class="is-size-5">Just tap <img src="/public/icons/svg/export.svg" width="30" height="30" alt="Share">
+            in the Safari menu bar and scroll down to <b><i>“Add to Home Screen”</i></b></p>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-medium close-ios-modal">Close</button>
+        </footer>
+      </div>
+    </div>
+    <div id="faqModal" class="modal has-text-dark">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Install Church Website</p>
+          <button class="delete close-faq-modal" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <p class="image is-128x128 is-centered">
+            <img src="/public/icons/png/logo.png" alt="Church Website Frequently Asked Questions" width="20"
+              height="15">
+          </p>
+          <p class="is-size-4">Hi There! Thanks for stopping by and checking out the latest Livestreams, Sermons, Daily Devotionals, Events and Prayer Requests!</p>
+          <ul>
+            <li>
+              <i>This page is best viewed from a smart mobile device and can be installed for an
+                App like experience.</i>
+            </li>
+            <li>
+              <i><b>iPhone users</b></i> can click on the <b>"Install"</b> button from the menu for instructions.
+            </li>
+            <li>
+              <i><b>Android users</b></i> can click on <b>"Add to Homescreen"</b> to install.
+            </li>
+            <li>
+              Please contact <a href="mailto:<%= settings.appSupportEmail %>"><b><%= settings.appSupportEmail %></b></a> with any
+              questions.
+            </li>
+            <li>Coming Soon: Recommended Reads!</li>
+          </ul>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-medium close-faq-modal">Dismiss</button>
+        </footer>
+      </div>
+    </div>
+    <div id="notificationModal" class="modal has-text-dark">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Notification</p>
+          <button class="delete close-notification-modal" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <p class="image is-128x128 is-centered">
+            <img src="/public/icons/png/logo.png" alt="Church Website Notification" width="20" height="15">
+          </p>
+          <p class="is-size-4" id="notification"></p>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-medium close-notification-modal">Dismiss</button>
+        </footer>
+      </div>
+    </div>
+  </article>
+</section>
+<script>
+  let isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches
+  if (document.querySelector('#moreButton')) {
+    document.querySelector('#moreButton').addEventListener('click', function (e) {
+      if (document.querySelector('.navbar-item.is-active')) {
+        document.querySelector('.navbar-item.is-active').classList.remove('is-active')
+      }
+      if (document.querySelectorAll('.back-to-top')) {
+        document.querySelectorAll('.back-to-top').forEach(top => {
+          top.classList.add('is-hidden')
+        })
+      }
+      let currentPartial = document.querySelectorAll('.partial.is-active')
+      currentPartial.forEach(cp => {
+        cp.classList.remove('is-active')
+        cp.classList.add('is-hidden')
+      })
+      let nextPartial = document.querySelector('#more')
+      nextPartial.classList.remove('is-hidden')
+      nextPartial.classList.add('is-active')
+    })
+  }
+
+  if (window.location.hash === '#more') {
+    document.querySelector('#moreButton').click()
+  }
+  
+  var closeIosInstall = document.querySelectorAll('.close-ios-modal')
+  closeIosInstall.forEach(ios => {
+    ios.addEventListener('click', function (e) {
+      e.preventDefault()
+      document.querySelector('#iosModal').classList.toggle('is-active')
+    })
+  })
+
+  var showIosInstall = document.querySelector('#showIosInstall')
+  // Hide the Install button if in Standalone
+  if (showIosInstall) {
+    if (isInStandaloneMode === true) {
+      showIosInstall.classList.toggle('is-hidden')
+    }
+    showIosInstall.addEventListener('click', function (e) {
+      e.preventDefault()
+      document.querySelector('#iosModal').classList.toggle('is-active')
+    })
+  }
+
+  var closeNotInstall = document.querySelectorAll('.close-notification-modal')
+  closeNotInstall.forEach(not => {
+    not.addEventListener('click', function (e) {
+      e.preventDefault()
+      document.querySelector('#notificationModal').classList.toggle('is-active')
+    })
+  })
+</script>

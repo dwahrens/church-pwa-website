@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en-US" class="has-navbar-fixed-top">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Church Website">
+    <meta name="keywords"
+      content="church, pastor">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/png/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/icons/png/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/png/favicon-16x16.png">
+    <link rel="stylesheet" href="css/bulma.min.css" defer/>
+    <link rel="stylesheet" href="css/plyr.css" defer/>
+    <link rel="stylesheet" href="css/home.css" defer/>
+
+    <title>Church</title>
+    <noscript>
+      <style>
+        .expand:target {
+          display: block!important;
+        }
+        .expandButtons:target {
+          display: hidden!important;
+        }
+      </style>
+    </noscript>
+  </head>
+
+  <body>
+    <nav id="page-nav" class="navbar is-transparent is-fixed-top is-dark">
+      <div class="container">
+        <div class="navbar-brand">
+          <a class="navbar-item" href="https://"<%= settings.domainName %>
+            <img src="" alt="">
+          </a>
+          <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
+        <div id="navMenu" class="navbar-menu">
+          <div class="navbar-start"></div>
+          <div class="navbar-end">
+            <a class="navbar-item spa is-hoverable" href="#start-img">Home</a>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link spa is-hoverable" href="#aboutus">About Us</a>
+              <div class="navbar-dropdown is-dark">
+                <a class="navbar-item spa is-hoverable about-us-more-button" data-name="service-times" href="#service-times">Our
+                  Service Times</a>
+                <a class="navbar-item spa is-hoverable about-us-more-button" data-name="mission" href="#mission">Our
+                  Mission</a>
+                <a class="navbar-item spa is-hoverable about-us-more-button" data-name="our-beliefs" href="#our-beliefs">Our Beliefs</a>
+                <a class="navbar-item spa is-hoverable about-us-more-button" data-name="our-team" href="#our-team">Our Team</a>
+              </div>
+            </div>
+            <a class="navbar-item spa is-hoverable" href="#sermons">Sermons</a>
+            <a class="navbar-item spa is-hoverable" href="#events">Events</a>
+            <a class="navbar-item spa is-hoverable" href="#contact-us">Contact Us</a>
+            <a class="navbar-item spa is-hoverable" href="#missionaries">Missionaries</a>
+            <a class="navbar-item is-hoverable" href="https://<%= settings.domain %>/public/" rel="noreferrer">Resources</a>
+            <div class="navbar-item">
+              <div class="buttons">
+                <a target="_blank" rel="noreferrer" class="button is-ghost"
+                href=""><img class="is-white-icon"
+                  src="icons/svg/youtube.svg" alt="YouTube Channel" height="20" width="20" /></a>
+                <a target="_blank" rel="noreferrer" class="button is-ghost"
+                href=""><img class="is-white-icon"
+                  src="icons/svg/facebook.svg" alt="Facebook Page" height="20" width="20" /></a>
+                <a class="navbar-item is-hoverable button is-primary" href="https://<%= settings.domain %>/public/login" rel="noreferrer">Member Login</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <article id="start-img"
+      class="hero is-fullheight has-text-centered lazy has-bg-img-main-png">
+      <div class="hero-body">
+        <!-- Ask Gavin to create a portfolio -->
+        <!-- Melanie to provide a icon, color scheme and word-smithing  -->
+        <section class="hero-title">
+          <h1 class="has-text-dark is-size-1 is-bold is-italic">Church</h1>
+          <h2 class="has-text-info is-size-2 is-italic"></h2>
+          <h4 class="is-size-4 is-italic is-bold has-text-centered has-top-padding has-bottom-padding"></h4>
+          <a href="https://<%= settings.domain %>/public/livestream" rel="noreferrer" class="button is-dark" id="livestream"
+            target="_blank">Our Livestream</a>
+        </section>
+        <!--<a href="#aboutus" class="pure-button pure-button-primary">Learn More</a>-->
+      </div>
+    </article>
+    <article id="aboutus" class="hero is-bold has-text-white-ter">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="is-size-1 has-text-centered">About Us</h1>
+          <hr>
+          <p class="is-size-4 has-top-padding"></p>
+          <p class="is-size-4 "></p>
+          <div class="columns has-top-padding expandButtons">
+            <div class="column">
+              <div class="has-text-centered">
+                <button class="button is-primary is-centered is-medium about-us-more-button" id="show-service-times"
+                  data-name="service-times">Our Service Times</button>
+              </div>
+            </div>
+            <div class="column">
+              <div class="has-text-centered">
+                <button class="button is-primary is-centered is-medium about-us-more-button" id="show-mission"
+                  data-name="mission">Our Mission</button>
+              </div>
+            </div>
+            <div class="column">
+              <div class="has-text-centered">
+                <button class="button is-primary is-centered is-medium about-us-more-button" id="show-our-beliefs" data-name="our-beliefs">Our Beliefs</button>
+              </div>
+            </div>
+            <div class="column">
+              <div class="has-text-centered">
+                <button class="button is-primary is-centered is-medium about-us-more-button" id="show-our-team"
+                  data-name="our-team">Our Team</button>
+              </div>
+            </div>
+            <div class="column">
+              <div class="has-text-centered">
+                <a class="button is-primary is-centered is-medium" href="https://<%= settings.domain %>/public/food-donations" target="_blank" rel="noreferrer">Food Box Nominations</a>
+              </div>
+            </div>
+          </div>
+          <section id="service-times" class="about-us-more is-hidden expand">
+            <div class="container has-text-centered">
+              <h3 class="is-size-3 has-text-white-ter has-text-centered">Service Times</h3>
+              <p class="is-size-5"><i></i></p>
+              <hr>
+              <ul class="has-text-centered">
+                <li class="is-size-5"></li>
+                <li class="is-size-5"></li>
+                <li class="is-size-5"></li>
+              </ul>
+            </div>
+            <div class="has-text-centered has-top-padding">
+              <button class="button is-primary about-us-more-hide" id="hide-our-beliefs">Hide</button>
+            </div>
+          </section>
+          <section id="mission" class="about-us-more is-hidden expand">
+            <div class="has-text-centered has-top-padding">
+              <button class="button is-primary about-us-more-hide" id="hide-our-beliefs">Hide</button>
+            </div>
+          </section>
+          <section id="our-team" class="about-us-more is-hidden is-medium has-text-centered expand">
+            <div class="container">
+              <h3 class="is-size-3 has-text-white-ter has-text-centered">Our Team</h3>
+              <hr>
+              <div class="columns is-multiline is-centered">
+                <div class="column is-one-quarter">
+                  <img rel=preconnect height="150" width="150" src="" loading=lazy class="img-circle image is-128x128 is-centered" alt="" />
+                  <p class="is-size-5 has-text-primary">Name</p>
+                  <p class="is-italic is-bold">Position</p>
+                </div>
+                <div class="column is-one-quarter">
+                  <img rel=preconnect height="150" width="150" src="" loading=lazy class="img-circle image is-128x128 is-centered" alt="" />
+                  <p class="is-size-5 has-text-primary">Name</p>
+                  <p class="is-italic is-bold">Position</p>
+                </div>
+                <div class="column is-one-quarter">
+                  <img rel=preconnect height="150" width="150" src="" loading=lazy class="img-circle image is-128x128 is-centered" alt="" />
+                  <p class="is-size-5 has-text-primary">Name</p>
+                  <p class="is-italic is-bold">Position</p>
+                </div>
+                <div class="column is-one-quarter">
+                  <img rel=preconnect height="150" width="150" src="" loading=lazy class="img-circle image is-128x128 is-centered" alt="" />
+                  <p class="is-size-5 has-text-primary">Name</p>
+                  <p class="is-italic is-bold">Position</p>
+                </div>
+                <div class="column is-one-quarter">
+                  <img rel=preconnect height="150" width="150" src="" loading=lazy class="img-circle image is-128x128 is-centered" alt="" />
+                  <p class="is-size-5 has-text-primary">Name</p>
+                  <p class="is-italic is-bold">Position</p>
+                </div>
+                <div class="column is-one-quarter">
+                  <img rel=preconnect height="150" width="150" src="" loading=lazy class="img-circle image is-128x128 is-centered" alt="" />
+                  <p class="is-size-5 has-text-primary">Name</p>
+                  <p class="is-italic is-bold">Position</p>
+                </div>
+                <div class="column is-one-quarter">
+                  <img rel=preconnect height="150" width="150" src="" loading=lazy class="img-circle image is-128x128 is-centered" alt="" />
+                  <p class="is-size-5 has-text-primary">Name</p>
+                  <p class="is-italic is-bold">Position</p>
+                </div>
+                <div class="column is-one-quarter">
+                  <img rel=preconnect height="150" width="150" src="" loading=lazy class="img-circle image is-128x128 is-centered" alt="" />
+                  <p class="is-size-5 has-text-primary">Name</p>
+                  <p class="is-italic is-bold">Position</p>
+                </div>
+              </div>
+              <button class="button is-primary about-us-more-hide" id="hide-our-team">Hide</button>
+          </section>
+        </div>
+      </div>
+
+    </article>
+    <article id="sermons"
+      class="hero is-fullheight has-text-centered has-text-white-ter lazy has-bg-img-sermons-png">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="is-size-1 has-text-centered">Latest Sermons</h1>
+          <hr>
+          <!-- Replace picture with Bible on Pulpit -->
+          <div id="add-sermons" class="columns">
+            <% if (sermons.length > 0) { %>
+            <% sermons.forEach((sermon) => { %>
+            <div class="column">
+              <div class="box">
+                <a id="sermon-<%= sermon.id %>" data-id="<%= sermon.id %>" 
+                  data-title="<%= sermon.title %>" data-file="<%= sermon.file %>"
+                  data-date="<%= sermon.date %>" data-speaker="<%= sermon.speaker %>"
+                  data-downloadfile="<%= sermon.downloadFile %>" data-service="<%= sermon.service_name %>"
+                  data-series="<%= sermon.series_name %>" data-video="<%= sermon.embedded_url %>" data-time="<%= sermon.time %>"
+                  data-start-passage="<%= JSON.stringify(sermon.passage_start) %>"
+                  data-end-passage="<%= JSON.stringify(sermon.passage_end) %>" data-passage="<%= sermon.passage %>"
+                  data-passagetext="<%= sermon.passageText %>" href="#sermon-<%= sermon.id %>"
+                  class="is-size-4 sermon"><%= sermon.title %></a>
+                <% if(sermon.speaker) { %>
+                <p class="is-size-5 is-bold">
+                  <%= sermon.speaker %>
+                  <% if(sermon.date) { %>
+                  - <%= sermon.date %>
+                  <% } %>
+                </p>
+                <% } %>
+                <% if(sermon.passage_start_id && sermon.passage_end_id) { %>
+                <p class="is-italic">
+                  <%= sermon.passage_start.book_name + ' ' + sermon.passage_start.chapter + ':' + sermon.passage_start.verse + ' - ' + sermon.passage_end.book_name + ' ' + sermon.passage_end.chapter + ':' + sermon.passage_end.verse %>
+                </p>
+                <% } %>
+
+              </div>
+            </div>
+            <% }) %>
+            <% } %>
+          </div>
+          <a href="https://<%= settings.domain %>/public/sermons" rel="noreferrer" class="button is-primary">View More
+            Sermons</a>
+        </div>
+      </div>
+    </article>
+    <!-- Need a background for the events -->
+    <article id="events"
+      class="hero is-bold is-fullheight has-text-white-ter">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="is-size-1 has-text-centered">Upcoming Events</h1>
+          <hr>
+          <div class="timeline is-centered">
+            <header class="timeline-header"><span class="tag is-large is-primary"><%= todays_date %></span></header>
+            <% timeline.forEach((event) => { %>
+            <div class="timeline-item">
+              <div class="timeline-content">
+                <p class="heading is-size-4 is-bold has-no-bottom-margin"><%= event.date %></p>
+                <p class="is-size-5 has-no-bottom-margin"><%= event.title %></p>
+                <p class="is-size-5 has-no-bottom-margin"><%= event.start_time %> - <%= event.end_time %></p>
+              </div>
+              <div class="timeline-marker"></div>
+            </div>
+            <% }) %>
+            <header class="timeline-header"><span class="tag is-large is-primary"><%= ten_days_date %></span></header>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article id="contact-us" class="hero has-text-white-ter lazy has-bg-img-contactus-png">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="is-size-1 has-text-centered">Contact Us</h1>
+          <hr>
+          <div class="columns">
+            <div class="column">
+              <form id="add-contact-us" method="POST" action="/send-message">
+                <!-- Name -->
+                <div class="field">
+                  <label for="name" class="label has-text-white-ter">Name</label>
+                  <div class="control">
+                    <input class="input" name="name" id="name" type="text" placeholder="Name" required />
+                  </div>
+                </div>
+                <!-- Email -->
+                <div class="field">
+                  <label for="email" class="label has-text-white-ter">Email</label>
+                  <div class="control">
+                    <input class="input" name="email" id="email" type="text" placeholder="email@email.com" required />
+                  </div>
+                </div>
+                <!-- Message -->
+                <div class="field">
+                  <label for="message" class="label has-text-white-ter">Message</label>
+                  <div class="control">
+                    <textarea class="textarea" name="message" id="message" placeholder="Enter your message"
+                      required></textarea>
+                  </div>
+                </div>
+                <p class="is-size-6 has-text-primary pb-2" id="remainingChar"></p>
+                <input class="is-hidden" name="honey" id="honey" type="text"/>
+                <div class="field">
+                  <div class="control">
+                    <input class="button is-primary" id="sendMessage" type="submit" />
+                  </div>
+                </div>
+              </form>
+              <p class="is-size-5 is-primary has-top-padding" id="sendMessageResponse"></p>
+            </div>
+            <div class="column">
+              <div class="columns">
+                <div class="column">
+                  <span class="is-size-4">Church Phone:</span>
+                  <a href="tel:" class="is-size-5">
+                    <p class="is-size-5 is-italic"></p>
+                  </a>
+                </div>
+                <div class="column">
+                  <p class="is-size-4">Address:</p>
+                  <p class="is-size-5"><i></i></p>
+                  <p class="is-size-5"><i></i></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </article>
+    <article id="missionaries" class="hero is-bold has-text-white-ter has-text-centered">
+      <div class="hero-body">
+        <div class="container">
+          <!-- Add Mark Mudge -->
+          <h1 class="is-size-1 has-text-centered">Missionary Partners in the Gospel</h1>
+          <hr>
+        </div>
+      </div>
+    </article>
+    <article id="sermonModal" class="modal has-text-dark">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title" id="sermonTitle"></p>
+          <button class="delete close-sermon-modal" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body has-text-centered">
+          <p class="is-size-4"><span id="sermonSpeaker"></span>, <span id="sermonDate"></span></p>
+          <p class="is-size-5 is-italic">Part of the <span id="sermonSeries" class="is-bold"></span> series, preached at a
+            <span id="sermonService" class="is-bold"></span> service.</p>
+          <audio id="sermonAudio" src="" preload="metadata" crossorigin="anonymous">
+            Your browser does not support the <code>audio</code> element.
+          </audio>
+          <div class="has-top-padding has-bottom-padding">
+            <a id="downloadSermon" href="" rel="noreferrer" download="" class="button is-primary is-medium is-rounded">Download Audio</a>
+          </div>
+          <div class="video-responsive">
+            <iframe id="sermonVideo" src="" frameborder="0"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" class="is-tile-centered"
+              allowfullscreen></iframe>
+          </div>
+          <div id="sermonPassageText" class="is-size-5 has-top-padding has-text-left"></div>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-medium close-sermon-modal">Dismiss</button>
+        </footer>
+      </div>
+    </article>
+  </body>
+  <script src="js/plyr.min.js" type="text/javascript" defer></script>
+  <script>
+    let sermonAudio
+    let burger = document.querySelector('.navbar-burger')
+    let nav = document.querySelector('#' + burger.dataset.target)
+
+    burger.addEventListener('click', function () {
+      burger.classList.toggle('is-active')
+      nav.classList.toggle('is-active')
+    })
+
+    let tabs = document.querySelectorAll('.tab')
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', (e) => {
+        e.preventDefault()
+        e.stopImmediatePropagation()
+        // event.currentTarget refers to element on which
+        // the event listener was attached
+        const tabName = e.currentTarget.attributes.id.value
+        const currentTab = document.querySelector('.tab.is-active')
+        const currentContent = document.getElementById(`${currentTab.id}-content`)
+        const newTab = document.getElementById(tabName)
+        const newTabContent = document.getElementById(`${tabName}-content`)
+
+        currentTab.classList.remove('is-active')
+        currentContent.classList.add('is-hidden')
+
+        newTab.classList.add('is-active')
+        newTabContent.classList.remove('is-hidden')
+      })
+    })
+
+    let aboutUsButtons = document.querySelectorAll('.about-us-more-button')
+    aboutUsButtons.forEach((buttons) => {
+      buttons.addEventListener('click', (e) => {
+        e.preventDefault()
+        let id = e.currentTarget.dataset.name
+        if (id === 'history') {
+          document.querySelector('#historyVideo').src = e.currentTarget.dataset.url
+        }
+        let currentId = document.querySelector('.about-us-more.is-active')
+        document.getElementById(id).classList.toggle('is-active')
+        document.getElementById(id).classList.toggle('is-hidden')
+        if (currentId) {
+          document.getElementById(currentId.id).classList.toggle('is-active')
+          document.getElementById(currentId.id).classList.toggle('is-hidden')
+        }
+      })
+    })
+
+    let aboutUsButtonHide = document.querySelectorAll('.about-us-more-hide')
+    aboutUsButtonHide.forEach((buttons) => {
+      buttons.addEventListener('click', (e) => {
+        e.preventDefault()
+        let currentId = document.querySelector('.about-us-more.is-active')
+        if (currentId) {
+          document.getElementById(currentId.id).classList.toggle('is-active')
+          document.getElementById(currentId.id).classList.toggle('is-hidden')
+        }
+      })
+    })
+
+    document.querySelectorAll('.spa').forEach((anchor) => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault()
+
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        })
+
+        burger.classList.toggle('is-active')
+        nav.classList.toggle('is-active')
+      })
+    })
+
+    document.querySelector('#sendMessage').addEventListener('click', (e) => {
+      e.preventDefault()
+      // TO DO: Add checking to ensure that all of the elements are filled in.
+      if (document.getElementById('honey').value === '') {
+        let postData = {
+          name: document.getElementById('name').value,
+          email: document.getElementById('email').value,
+          message: document.getElementById('message').value.replace(/\n\r?/g, '<br />'),
+          honey: document.getElementById('honey').value
+        }
+        let error = false
+        if (postData.name.length === 0) {
+          error = true
+          alert('Please enter you name to send your message.')
+        } else if (postData.email.length === 0 || postData.email.indexOf('@') === -1 || postData.email.indexOf('.') === -1) {
+          error = true
+          alert('Please enter a valid email address to send your message.')
+        } else if (postData.message.length === 0) {
+          error = true
+          alert('Please enter your message.')
+        } else if (postData.message.length > 250) {
+          error = true
+          alert('Please do not exceed 250 characters.')
+        } else if (postData.message.indexOf('href=') > -1 || postData.message.indexOf('http') > -1) {
+          error = true
+          alert('Please do not include links to other websites.')
+        }
+
+        if (!error) {
+          let fetchData = {
+            method: 'POST',
+            body: JSON.stringify(postData),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+          fetch('/send-message', fetchData)
+            .then((resp) => resp.json())
+            .then((data) => {
+              var message = document.getElementById('sendMessageResponse')
+              message.textContent = data.message
+              message.classList.remove('is-hidden')
+              document.querySelector('#name').value = ''
+              document.querySelector('#email').value = ''
+              document.querySelector('#message').value = ''
+              document.getElementById('remainingChar').innerHTML = '250 Characters Remaining'
+            })
+        }
+      } else {
+        return false
+      }
+    })
+
+    document.querySelectorAll('.sermon').forEach((sermon) => {
+      sermon.addEventListener('click', (e) => {
+        e.preventDefault()
+        var sermonId = e.currentTarget.dataset.id
+        document.querySelector('#sermonSpeaker').textContent = e.currentTarget.dataset.speaker
+        document.querySelector('#sermonDate').textContent = e.currentTarget.dataset.date
+        document.querySelector('#sermonSeries').textContent = e.currentTarget.dataset.series
+        document.querySelector('#sermonTitle').textContent = e.currentTarget.dataset.title
+        document.querySelector('#sermonService').textContent = e.currentTarget.dataset.service
+        document.querySelector('#sermonAudio').src = e.currentTarget.dataset.file
+        document.querySelector('#downloadSermon').href = e.currentTarget.dataset.downloadfile
+        document.querySelector('#downloadSermon').download = e.currentTarget.dataset.downloadfile
+        document.querySelector('#sermonPassageText').innerHTML = e.currentTarget.dataset.passagetext
+        if (e.currentTarget.dataset.video) {
+          document.querySelector('#sermonVideo').src = e.currentTarget.dataset.video
+          document.querySelector('.video-responsive').classList.remove('is-hidden')
+        } else {
+          document.querySelector('.video-responsive').classList.add('is-hidden')
+        }
+
+        sermonAudio = new Plyr(document.querySelector('#sermonAudio'))
+        sermonAudio.on('playing', (event) => {
+          let updateData = { id: sermonId }
+          let fetchData = {
+            method: 'POST',
+            body: JSON.stringify(updateData),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+          fetch('/increment-sermon-count', fetchData)
+            .then((resp) => resp.json())
+            .then((data) => {})
+        })
+        document.querySelector('#sermonModal').classList.toggle('is-active')
+      })
+    })
+
+    var closeSermonInstall = document.querySelectorAll('.close-sermon-modal')
+    closeSermonInstall.forEach((sermonModal) => {
+      sermonModal.addEventListener('click', function (e) {
+        e.preventDefault()
+        document.querySelector('#sermonModal').classList.toggle('is-active')
+      })
+    })
+
+    let message = document.getElementById('message')
+    let remainingChar = document.getElementById('remainingChar')
+    message.onpaste = (e) => {
+      e.preventDefault()
+    }
+    message.addEventListener('keydown', (e) => {
+      var remainingCharacters = 250 - message.value.length
+      remainingChar.innerHTML = remainingCharacters + ' Characters Remaining'
+    })
+
+    var lazyloadThrottleTimeout
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var lazyloadImages
+
+      if ('IntersectionObserver' in window) {
+        lazyloadImages = document.querySelectorAll('.lazy')
+        var imageObserver = new IntersectionObserver(function (entries, observer) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              var image = entry.target
+              image.classList.remove('lazy')
+              imageObserver.unobserve(image)
+            }
+          })
+        })
+
+        lazyloadImages.forEach(function (image) {
+          imageObserver.observe(image)
+        })
+      } else {
+        document.addEventListener('scroll', lazyload)
+        window.addEventListener('resize', lazyload)
+        window.addEventListener('orientationChange', lazyload)
+      }
+    })
+
+    let lazyload = () => {
+      var lazyloadImages = document.querySelectorAll('.lazy')
+      
+      if (lazyloadThrottleTimeout) {
+        clearTimeout(lazyloadThrottleTimeout)
+      }
+
+      lazyloadThrottleTimeout = setTimeout(function () {
+        var scrollTop = window.pageYOffset
+        lazyloadImages.forEach(function (img) {
+          if (img.offsetTop < window.innerHeight + scrollTop) {
+            img.src = img.dataset.src
+            img.classList.remove('lazy')
+          }
+        })
+        if (lazyloadImages.length == 0) {
+          document.removeEventListener('scroll', lazyload)
+          window.removeEventListener('resize', lazyload)
+          window.removeEventListener('orientationChange', lazyload)
+        }
+      }, 20)
+    }
+
+    function loadStyleSheet(src){
+      if (document.createStyleSheet) document.createStyleSheet(src);
+      else {
+          var stylesheet = document.createElement('link');
+          stylesheet.href = src;
+          stylesheet.rel = 'stylesheet';
+          stylesheet.type = 'text/css';
+          document.getElementsByTagName('head')[0].appendChild(stylesheet);
+      }
+    }
+  </script>
+</html>

@@ -1,0 +1,93 @@
+
+.arrow { border: solid black; border-width: 0 3px 3px 0; display: inline-block; padding: 3px; }
+.up { transform: rotate(-135deg); -webkit-transform: rotate(-135deg); }
+.down { transform: rotate(45deg); -webkit-transform: rotate(45deg); }
+.splash { background: url("../img/dark_embroidery.png") repeat; font-family: sans-serif; padding: 0.25em; height:100%; }
+.under-construction { background: url("../img/under-construction-min.jpg") center; font-family: sans-serif; padding: 0.25em; }
+.video-responsive { overflow:hidden; padding-bottom:56.25%; position:relative; height:0; }
+.video-responsive iframe { left:0; top:0; height:100%; width:100%; position:absolute; }
+.prayer-request-form { padding-top:2em; display: none; height: 0; opacity: 0; overflow: hidden; transition: height 2000ms ease-in-out, opacity 750ms ease-in-out; }
+.prayer-request-form.is-visible { display: block;	height: auto; opacity: 1; }
+.prayer-request-table { padding-top: 2em; }
+.prayer-request-response { padding-top: 1em; display: none; height: 0; opacity: 0; overflow: hidden; transition: height 2000ms ease-in-out, opacity 750ms ease-in-out; }
+.prayer-request-response.is-visible { display: block; height: auto; opacity: 1; }
+.privateWarning { margin: 1em; text-align: left; }
+.hidden { display: none; }
+.is-centered { margin-left:auto; margin-right:auto; }
+.is-tile-centered { margin-top: 2em; margin-left: auto; margin-right: auto; }
+.is-size-8 { font-size: 0.65rem; }
+.is-first-tile { margin-top: 3.25em; }
+.partial { margin-bottom: 4em; }
+.is-last-tile { margin-bottom: 5em; }
+.is-lmargin { margin-left: 0.25em; }
+.is-white-icon { filter: invert(100%) sepia(10%) saturate(7453%) hue-rotate(293deg) brightness(120%) contrast(93%); }
+.is-bottom-nav-image { max-height: 1.25rem!important; }
+.is-small-notification { padding: 0.25rem 1.25rem 0.5rem 2rem; }
+.box.is-grey { background-color: #EAEBEB; }
+.navbar-center { margin-left: auto; margin-right: auto; }
+.has-no-bottom-margin { margin-bottom: 0px!important; }
+.has-no-top-margin { margin-top: 0px!important; }
+.has-right-margin { margin-right: 0.5rem; }
+.has-5-bm { margin-bottom: 5rem; }
+.login { border-radius:30px; margin-top: 25%;background: whitesmoke; width: 350px; margin-left: auto; margin-right: auto; }
+.login-input { padding:12px; }
+.login-header { padding-top: 8px; }
+.login input { display:inline!important; }
+.is-logo-centered { margin-right: auto !important; margin-left: auto !important; }
+.is-field-grouped-horizontally { padding: 1em; }
+.message { font-style: italic; margin: 1em; }
+.captcha { margin-left: 14%; display: inline-block; }
+.title { padding-top: 1.5em; }
+.subtitle:not(:last-child) { margin-bottom: .75em; }
+.subtitle { line-height: .90; }
+#alertsForm { margin-top: 5%; }
+#filterDaily { width: 98%; }
+#prayer-requests { width: 98%; }
+.is-large-checkbox { width: 25px; height: 25px; }
+.is-medium-checkbox { width: 18px; height: 18px; }
+.container { margin-left: 0.5em; margin-right: 0.5em; }
+.prayer-requests { padding: 0.65rem; }
+.table.is-narrow td, .table.is-narrow th { padding: .25em 0.25em; }
+.has-top-padding { padding-top: 2rem; }
+.has-top-padding-notification { margin-top: 3.5rem; }
+.login-box { margin-top: 3rem; }
+.has-bottom-margin { margin-bottom: 0.75rem; }
+.plyr { height: auto; }
+.back-to-top { position: fixed; bottom: 5rem; right: 1rem; }
+.bottom-menu { align-items: center!important; }
+.pr-interaction { font-size: 0.75rem; }
+.calendarDates { min-height: 8rem; min-width: 4rem; border: #282f42 0.25px solid; }
+.roundedEvent { border-radius: 4px; }
+@media (max-width:1023px) {
+    img.can-hide {
+        display: none;
+    }
+}
+  
+@media screen and (min-width: 1024px) {
+    .image.is-48x48-desktop { height: 48px; width: 48px; }
+}
+@media all and (min-width:960px) and (max-width: 1024px) {
+.image.is-48x48-desktop { height: 48px; width: 48px; }
+}
+@media all and (min-width:801px) and (max-width: 959px) {
+.image.is-48x48-desktop { height: 48px; width: 48px; }
+}
+@media all and (min-width:769px) and (max-width: 800px) {
+.image.is-48x48-desktop { height: 48px; width: 48px;}
+}
+@media all and (min-width:569px) and (max-width: 768px) {
+.image.is-32x32-tablet { height: 32px; width: 32px; }
+/*.navbar-center { width: 94% !important; }*/
+.is-bottom-nav-image { max-height: 0.9rem!important; }
+}
+@media all and (min-width:481px) and (max-width: 568px) {
+.image.is-32x32-tablet { height: 32px; width: 32px; }
+}
+@media all and (min-width:321px) and (max-width: 480px) {
+.image.is-16x16-mobile { height: 16px; width: 16px; }
+}
+@media all and (min-width:0px) and (max-width: 320px) {
+.image.is-16x16-mobile { height: 16px; width: 16px; }
+}
+.plyr { height: auto; }

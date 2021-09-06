@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en-US" class="has-navbar-fixed-top">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Church Website">
+    <meta name="keywords"
+      content="church, pastor">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/png/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/icons/png/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/png/favicon-16x16.png">
+    <link rel="stylesheet" href="css/bulma.min.css" defer/>
+    <link rel="stylesheet" href="css/plyr.css" defer/>
+    <link rel="stylesheet" href="css/home.css" defer/>
+
+    <title>Church Website</title>
+    <noscript>
+      <style>
+        .expand:target {
+          display: block;
+        }
+      </style>
+    </noscript>
+  </head>
+
+  <body>
+    <nav id="page-nav" class="navbar is-transparent is-fixed-top is-dark">
+      <div class="container">
+        <div class="navbar-brand">
+          <a class="navbar-item" href="https://<%= settings.domain %>"></a>
+          <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
+        <div id="navMenu" class="navbar-menu">
+          <div class="navbar-start"></div>
+          <div class="navbar-end">
+            <a class="navbar-item spa is-hoverable" href="#start-img">Home</a>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link spa is-hoverable" href="#aboutus">About Us</a>
+              <div class="navbar-dropdown is-dark">
+                <a class="navbar-item spa is-hoverable about-us-more-button" data-name="mission" href="#mission">Our
+                  Mission</a>
+                <a class="navbar-item spa is-hoverable about-us-more-button" data-name="our-beliefs" href="#our-beliefs">Our Beliefs</a>
+                <a class="navbar-item spa is-hoverable about-us-more-button" data-name="our-team" href="#our-team">Our Team</a>
+              </div>
+            </div>
+            <a class="navbar-item spa is-hoverable" href="#sermons">Sermons</a>
+            <a class="navbar-item spa is-hoverable" href="#events">Events</a>
+            <a class="navbar-item spa is-hoverable" href="#contact-us">Contact Us</a>
+            <a class="navbar-item spa is-hoverable" href="#missionaries">Missionaries</a>
+            <a class="navbar-item is-hoverable" href="https://<%= settings.domain %>/public/" rel="noreferrer">Resources</a>
+            <div class="navbar-item">
+              <div class="buttons">
+                <a target="_blank" rel="noreferrer" class="button is-ghost"
+                href=""><img class="is-white-icon"
+                  src="icons/svg/youtube.svg" alt="YouTube Channel" height="20" width="20" /></a>
+                <a target="_blank" rel="noreferrer" class="button is-ghost"
+                href=""><img class="is-white-icon"
+                  src="icons/svg/facebook.svg" alt="Facebook Page" height="20" width="20" /></a>
+                <a class="navbar-item is-hoverable button is-primary" href="https://<%= settings.domain %>/public/login" rel="noreferrer">Member Login</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <article id="success" class="hero is-bold has-text-white-ter">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="is-size-1 has-text-centered">Successfully sent your Message!</h1>
+        </div>
+      </div>
+    </article>
+  </body>
+</html>

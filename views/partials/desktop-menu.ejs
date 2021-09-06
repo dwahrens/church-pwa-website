@@ -1,0 +1,123 @@
+<nav id="page-nav" class="navbar is-transparent is-fixed-top is-dark">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="https://<%= settings.domain %>">Church Website</a>
+    <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div id="navMenu" class="navbar-menu">
+    <div class="navbar-start"></div>
+    <div class="navbar-end">
+      <% if (authorized) { %>
+      <a class="navbar-item mr-1 <% if (page === 'prayer-requests') { %>is-active<% } %>"href="/public/prayer-requests">
+        <img class="is-white-icon is-bottom-nav-image can-hide has-right-margin" src="/public/icons/svg/prayer.svg" alt="Prayer Requests" /> Prayer Requests
+      </a>
+      <% } %>
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          Media
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item <% if (page == 'livestream') { %>is-active<% } %>" href="/public/livestream">
+            <img class="is-white-icon is-bottom-nav-image can-hide has-right-margin" src="/public/icons/svg/live.svg" alt="Live Stream" /> Live Stream
+          </a>
+          <a class="navbar-item <% if (page == 'sermons') { %>is-active<% } %>" href="/public/sermons">
+            <img class="is-white-icon is-bottom-nav-image can-hide has-right-margin" src="/public/icons/svg/sermon.svg" alt="Sermons" /> Sermons
+          </a>
+          <% if (sundayschool) { %>
+          <a class="navbar-item" href="<%= sundayschool.url %>">
+            <img class="is-white-icon is-bottom-nav-image can-hide has-right-margin" src="/public/icons/svg/sundayschool.svg" alt="Sunday School" /> Sunday School Online
+          </a>
+          <% } %>
+          <a class="navbar-item <% if (page === 'daily-devo') { %>is-active<% } %>" href="/public/daily-devos">
+            <img class="is-white-icon is-bottom-nav-image can-hide has-right-margin" src="/public/icons/svg/daily-devo.svg" alt="Daily Devotionals" /> Daily Devos
+          </a>
+        </div>
+      </div>
+      <div class="navbar-item has-dropdown is-hoverable">
+        <div class="navbar-link">
+          Study
+        </div>
+        <div class="navbar-dropdown">
+          <a class="navbar-item <% if (page === '1689') { %>is-active<% } %>" href="/public/1689">
+            <img class="is-white-icon is-bottom-nav-image can-hide has-right-margin" src="/public/icons/svg/1689.svg" alt="1689 London Baptist Confession" /> 1689 Confession
+          </a>
+          <a class="navbar-item" target="_blank" href="https://www.simpsonpublishing.com/SCB.pdf">
+            <img class="is-white-icon is-bottom-nav-image can-hide has-right-margin" src="/public/icons/svg/1689.svg" alt="Shorter Catechism (a Baptist Version)" /> Shorter Catechism
+          </a>
+          <a class="navbar-item" target="_blank" href="https://morning-evening.cf">
+            <img class="is-white-icon is-bottom-nav-image can-hide has-right-margin" src="/public/icons/svg/1689.svg" alt="Spurgeon's Morning & Evening" /> Morning & Evening
+          </a>
+        </div>
+      </div>
+      <div class="navbar-item has-dropdown is-hoverable">
+        <div class="navbar-link">
+            More
+        </div>
+        <div class="navbar-dropdown">
+          <a class="navbar-item <% if (page === 'events') { %>is-active<% } %>" href="/public/events">
+            <img class="is-white-icon is-bottom-nav-image can-hide has-right-margin" src="/public/icons/svg/date.svg" alt="Events" /> Events
+          </a>
+          <a class="navbar-item <% if (page === 'food-donations') { %>is-active<% } %>" href="/public/food-donations">
+            <img class="is-white-icon is-bottom-nav-image can-hide has-right-margin" src="/public/icons/svg/basket.svg" alt="Food Donations" /> Food Box
+          </a>
+          <a class="navbar-item <% if (page === 'faq') { %>is-active<% } %>" href="/public/faq">
+            <img class="is-white-icon image is-bottom-nav-image can-hide has-right-margin" src="/public/icons/svg/faq.svg"
+              alt="FAQ" /> Frequently Asked Questions
+          </a>
+          <a class="navbar-item <% if (page === 'privacy-policy') { %>is-active<% } %>" href="/public/privacy-policy">
+            <img class="is-white-icon image is-bottom-nav-image can-hide has-right-margin" src="/public/icons/svg/privacy-policy.svg"
+              alt="Privacy Policy" /> Privacy Policy
+          </a>
+          <a class="navbar-item <% if (page === 'terms-conditions') { %>is-active<% } %>" href="/public/terms-conditions">
+            <img class="is-white-icon image is-bottom-nav-image can-hide has-right-margin" src="/public/icons/svg/terms-conditions.svg"
+              alt="Terms and Conditions" /> Terms and Conditions
+          </a>
+        </div>
+      </div>
+      <% if (loggedIn) { %>
+      <a class="navbar-item " href="/public/user-profile">
+        <img class="is-white-icon is-bottom-nav-image can-hide has-right-margin" src="/public/icons/svg/account.svg" alt="Profile" /> Profile
+      </a>
+      <% } %>
+      <% if (user.is_admin) { %>
+        <a class="navbar-item mr-1" href="/manage">
+          <img class="is-white-icon is-bottom-nav-image can-hide has-right-margin" src="/public/icons/svg/settings.svg" alt="Settings" /> Manage
+        </a>
+        <% } %>
+      <div class="buttons mr-3">
+        <% if (!loggedIn) { %>
+        <a class="navbar-item button is-primary is-hoverable" href="/public/login">
+          <!--<img class="is-white-icon is-bottom-nav-image can-hide has-right-margin" src="/public/icons/svg/account.svg" alt="Login" />-->Login
+        </a>
+        <a class="navbar-item button is-info" href="/public/register">
+          Register
+        </a>
+        <% } else { %>
+        <a class="navbar-item button is-primary is-hoverable" href="/public/logout">
+          <!--<img class="is-white-icon is-bottom-nav-image can-hide has-right-margin" src="/public/icons/svg/account.svg" alt="Login" />-->Logout
+        </a>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</nav>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0)
+    if ($navbarBurgers.length > 0) {
+      $navbarBurgers.forEach( el => {
+        el.addEventListener('click', () => {
+          const target = el.dataset.target
+          const $target = document.getElementById(target)
+          el.classList.toggle('is-active')
+          $target.classList.toggle('is-active')
+
+        })
+      })
+    }
+  })
+  
+</script>

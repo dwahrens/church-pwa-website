@@ -1,0 +1,35 @@
+#start-img > .hero-body { padding: 0 0 0 0 !important; }
+.expand { display: none; }
+.is-audio, .vid {width: 100%; }
+.is-centered { margin-left:auto; margin-right:auto; }
+.is-large-header { font-size: 1.75em; }
+.is-medium-header { font-size: 1.25em; }
+.is-large-text { font-size: 1.05em; }
+.is-indented-list { padding-left: 5%; }
+.is-indented { padding-left: 2%; }
+.title { font-style: oblique; font-size: 3em; }
+.is-bold { font-weight: 600; }
+.is-left-indented { padding-left: 15%; }
+.is-white-icon { filter: invert(100%) sepia(10%) saturate(7453%) hue-rotate(293deg) brightness(120%) contrast(93%); }
+.has-top-padding { padding-top: 2rem; }
+.has-bottom-padding { padding-bottom: 2rem; }
+.tile.is-ancestor.is-sermon-card { width: 50%; margin-left: auto; margin-right: auto; }
+.img-circle { border-radius: 50%; }
+.img-soft-corner { border-radius: 10%; }
+.scripted { font-family: cursive; }
+.video-responsive { overflow:hidden; padding-bottom:56.25%; position:relative; height:0; }
+.video-responsive iframe { left:0; top:0; height:100%; width:100%; position:absolute; }
+.plyr { height: auto !important; }
+.about-us-more { scroll-margin-top: 10rem; }
+@media only screen and (min-width: 756px) {
+  .navbar-item img { max-height: 4.5rem; }
+}
+
+@media screen and (min-width: 1025px) {
+  .navbar-item.is-hoverable:hover .navbar-dropdown {
+      display: block !important;
+  }
+  .navbar-item.is-hoverable:focus-within .navbar-dropdown {
+      display: none;
+  }
+}

@@ -1,0 +1,121 @@
+<%- include('partials/header') %>
+<section id="faq" class="hero is-fullheight partial is-active <% if (!isMobile) { %>has-top-padding-notification<% } %>">
+  <div class="content is-fluid is-fullhd">
+    <div class="tile is-parent">
+      <div class="tile is-child is-light box is-vertical">
+        <h3 class="has-text-dark is-size-3 has-text-centered is-centered"><i>Frequently Asked Questions</i></h3>
+        <hr class="is-dark">
+        <p class="has-text-dark">Please contact <a href="mailto:<%= settings.appSupportEmail %>"><b><%= settings.appSupportEmail %></b></a> with any questions or suggestions for new content to this page.</p>
+        <article class="card">
+          <header class="card-header">
+            <p class="card-header-title">
+              Installation
+            </p>
+          </header>
+          <div id="install-card" class="is-collapsible is-active has-text-dark">
+            <div class="card-content has-text-dark">
+              <p class="is-size-5 has-text-centered is-centered has-text-dark">
+                <!-- Add instructions to for User Profile Here.   -->
+                <ul>
+                  <li>
+                    <i>This page is best viewed from a smart mobile device and can be installed for an
+                      App like experience.</i>
+                  </li>
+                  <li>
+                    <i><b>iPhone users</b></i> can click on the <b>"Install"</b> button from the menu for instructions.
+                  </li>
+                  <li>
+                    <i><b>Android users</b></i> can click on <b>"Add to Homescreen"</b> to install.
+                  </li>
+                </ul>
+              </p>
+              <p class="is-size-5 has-text-dark">Watch a video on how to install on iOS</p>
+              <video width="320" height="240" controls>
+                <source src="/static/videos/InstalliOS.mp4" type="video/mp4">
+              </video>
+              <p class="is-size-5 has-text-dark">Watch a video on how to install on Android</p>
+              <video width="320" height="240" controls>
+                <source src="/static/videos/InstallAndroid.mp4" type="video/mp4">
+              </video>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <header class="card-header">
+          <p class="card-header-title">
+            Signing up for notifications
+          </p>
+        </header>
+        <div id="notification-card" class="is-collapsible is-active has-text-dark">
+          <div class="card-content has-text-dark">
+            <p class="is-5 has-text-centered is-centered has-text-dark">
+              <!-- Add instructions to for User Profile Here.   -->
+              <ul>
+                <li>
+                  Begin by signing into the app.
+                </li>
+                <li>
+                  Open the <i>More</i> menu.
+                </li>
+                <li>
+                  Then, click on the <i>Profile</i> button.
+                </li>
+                <li>
+                  You can then update your email and optionally your phone number and carrier. Check the <i>"Sign me up for notifications box</i>.
+                </li>
+                <li>
+                  <b>By default, all notifications come through email. If you would like to receive text notifications as well please check <i>You may text and email me Notifications (fees may apply for text messages)</i>.</b>
+                </li>
+                <li>
+                  When you are finished with your changes please click <i>Submit</i>.
+                </li>
+                <li>
+                  You will now receive notifications from the site for news, prayer requests and schedule changes.
+                </li>
+              </ul>
+            </p>
+        </div>
+      </div>
+    </article>
+    <article class="card">
+      <header class="card-header">
+        <p class="card-header-title">
+          Reset Your Password
+        </p>
+      </header>
+      <div id="notification-card" class="is-collapsible is-active has-text-dark">
+        <div class="card-content has-text-dark">
+          <p class="is-5 has-text-centered is-centered has-text-dark">
+            <!-- Add instructions to for User Profile Here.   -->
+            <ul>
+              <li>
+                Begin by clicking on the <i>Login</i> button.
+              </li>
+              <li>
+                Click on <i>Reset Password</i> button.
+              </li>
+              <li>
+                Fill in the form with the email address you use to login to the app with and click submit.
+              </li>
+              <li>
+                You will then receive an email to the asssociate address with a link to reset your password. Click on the link.
+              </li>
+              <li>
+                Enter a new password in the form and then click submit.
+              </li>
+              <li>
+                You will then be redirected to the login page to log into the site.
+              </li>              
+            </ul>
+          </p>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+<script>
+</script>
+<% if (isMobile) { %>
+<%- include('partials/more') %>
+<% } %>
+<%- include('partials/footer') %>

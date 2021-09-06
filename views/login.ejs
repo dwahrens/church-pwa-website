@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Church Website</title>
+    <link rel="stylesheet" href="/public/css/bulma.min.css">
+    <link rel="stylesheet" href="/public/css/index.css" />
+    <link rel="manifest" href="/public/manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Church App">
+    <meta name="apple-mobile-web-app-title" content="Church App">
+    <meta name="theme-color" content="#2D3142">
+    <meta name="msapplication-navbutton-color" content="#2D3142">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/public/icons/png/ms-icon-144x144.png">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="msapplication-starturl" content="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="apple-touch-icon" sizes="57x57" href="/public/icons/png/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/public/icons/png/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/public/icons/png/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/public/icons/png/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/public/icons/png/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/public/icons/png/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/public/icons/png/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/public/icons/png/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/icons/png/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/public/icons/png/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/icons/png/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/public/icons/png/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/icons/png/favicon-16x16.png">
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <main class="splash">
+      <section id="login" class="hero is-fullheight partial is-active">
+        <article class="content login-box">
+          <div class="columns is-centered is-vcentered">
+            <div class="column is-half">
+              <div class="tile is-light box is-vertical">                
+                <h3 class="has-text-dark has-text-centered is-size-3 has-no-top-margin has-no-bottom-margin"><i>Member Login</i></h3>
+                <hr class="is-dark">
+                <form action="/login" method="POST">
+                  <fieldset>
+                    <div class="field is-horizontal">
+                      <div class="field-label is-normal">
+                        <label class="label" for="email">Email: </label>
+                      </div>
+                      <div class="field-body">
+                        <div class="field">
+                          <div class="control">
+                            <input class="input" name="email" id="email" type="email" placeholder="email@" <% if (locals.email) { %>value="<%= locals.email %>"<% } else { %>value=""<% } %> required>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="field is-horizontal">
+                      <div class="field-label is-normal">
+                        <label class="label" for="password">Password: </label>
+                      </div>
+                      <div class="field-body">
+                        <div class="field">
+                          <div class="control">
+                            <input class="input" name="password" id="password" type="password" required>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <button type="submit" class="button is-info is-pulled-right" id="submitLogin">Submit</button>
+                    <% if(locals.errors) { %>
+                    <% locals.errors.forEach((e) => { %>
+                    <p class="has-text-dark is-size-4 has-top-padding" id="loginMessage">Error: <%- e.msg %></p>
+                    <% }) %>
+                    <% } %>
+                    <% if(locals.success) { %>
+                    <% locals.success.forEach((e) => { %>
+                    <p class="has-text-dark is-size-4 has-top-padding" id="successMessage"><%- e.msg %></p>
+                    <% }) %>
+                    <% } %>
+                  </fieldset>
+                </form>
+                <hr class="is-dark">
+                <div class="mb-5 pb-5 buttons">
+                  <a class="button is-dark" href="/public/livestream">Home</a>
+                  <a class="button is-primary" href="/public/reset">Reset Password</a>
+                  <a class="button is-info" href="/public/register">Register New Account</a> 
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

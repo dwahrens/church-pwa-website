@@ -1,0 +1,189 @@
+<%- include('partials/header') %>
+<section id="food-donations" class="hero is-fullheight partial is-active <% if (!isMobile) { %>has-top-padding-notification<% } %>">
+  <article class="content is-fluid is-fullhd">
+    <div class="tile is-parent">
+      <div class="tile is-child box is-light is-vertical">
+        <h3 class="has-text-dark is-size-3 has-text-centered is-centered"><i>Food Box Nomination</i></h3>
+        <p class="has-text-centered is-5">
+          Our Church would like to bless those in our community and the greater Mohawk Valley who are in need with a gift of food.
+          If you know someone who would benefit from this donation, please nominate them using the
+          form below. Before we can place our order for the food boxes, we must confirm with the
+          nominee their acceptance of the love offering and set up delivery.
+        </p>
+        <hr class="is-dark">
+        <form id="foodDonations" action="/send-food-donations" method="post">
+          <fieldset>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="yourName">Your Name: </label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" name="yourName" id="yourName" type="text" placeholder="Your Name" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="checkbox label">
+                  Do you wish to remain anonymous?                  
+                </label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input name="anonymous" id="anonymous" type="checkbox">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="nomineeName">Nominee Name: </label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" name="nomineeName" id="nomineeName" type="text" placeholder="Nominee Name"
+                      required>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="nomineePhone">Nominee Phone: </label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" name="nomineePhone" id="nomineePhone" type="phone" placeholder="1234567890"
+                      required>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="checkbox label">
+                  Accepts Texts?
+                </label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input name="nomineeTexts" id="nomineeTexts" type="checkbox">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="nomineeAddress">Nominee Address: </label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" name="nomineeAddress" id="nomineeAddress" type="text" placeholder="Address"
+                      required>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="nomineeCity">Nominee City: </label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" name="nomineeCity" id="nomineeCity" type="text" placeholder="City" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="nomineeZip">Nominee Zip: </label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" name="nomineeZip" id="nomineeZip" type="number" placeholder="12345" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="nomineeEmail">Nominee Email: </label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" name="nomineeEmail" id="nomineeEmail" type="email"
+                      placeholder="nominee@email.com">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="nomineeAdults">Number of Adults: </label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" name="nomineeAdults" id="nomineeAdults" value="1" type="number" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="nomineeChildren">Number of Children: </label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" name="nomineeChildren" id="nomineeChildren" value="0" type="number" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <input class="is-hidden" name="honey" id="honey" value="" type="text"/>
+            <div class="has-text-centered is-centered">
+              <button type="submit" class="button is-primary" id="submitFoodDonations">Submit</button>
+              <p class="has-text-primary is-size-4 has-top-padding" id="foodDonationsMessage"></p>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </article>
+</section>
+<script>
+  document.querySelector('#foodDonations').onsubmit = async (e) => {
+    e.preventDefault()
+    if (document.querySelector('#honey').value.length === 0) {
+      let response = await fetch('/send-food-donations', {
+        method: 'POST',
+        body: new FormData(document.querySelector('#foodDonations'))
+      })
+
+      let result = await response.text()
+      document.querySelector('#foodDonationsMessage').innerHTML = result
+      document.querySelector('#nomName').innerHTML = document.querySelector('#nomineeName').value
+      document.querySelector('#foodDonations').reset()
+      setTimeout(() => {
+        document.querySelector('#foodDonationsMessage').innerHTML = ''
+      }, 3000)
+    }
+  }
+</script>
+<% if (isMobile) { %>
+<%- include('partials/more') %>
+<% } %>
+<%- include('partials/footer') %>

@@ -1,0 +1,74 @@
+<article id="sunday-registration" class="hero is-fullheight partial is-hidden">
+  <section>
+    <div class="tile is-parent">
+      <div class="tile is-child is-light box is-vertical">
+        <h3 class="is-centered is-size-3">Sunday Morning Registration</h3>
+        <p class="is-size-5">Available seating: <span class="has-text-info is-size-4" id="remainingRegistrations"></span></p>
+        <p class="is-size-5 message" id="registrationResponse"></p>
+        <!-- Place the signup form here, should attempt to prefill using the session -->
+        <form id="registrationForm">
+          <p class="subtitle-is-3">* - This field is required</p>
+          <fieldset>
+            <div class="field">
+              <label class="label" for="party"><span class="has-text-danger">*</span> How many people in your party?</label>
+              <div class="control">
+                <select class="input is-lmargin" name="regParty" id="regParty">
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                  <option value="4">Four</option>
+                  <option value="5">Five</option>
+                  <option value="6">Six</option>
+                </select>
+              </div>
+            </div>
+            <input type="hidden" name="regUser" id="regUser" value="<%= user.id %>" />
+            <button type="button" id="submitSundayRegistration" class="button is-success submit">Submit</button>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </section>
+</article>
+<script>
+  const registerUrl = window.location.origin + '/register-io'
+  const register = io.connect(registerUrl)
+
+  register.on('updated-registrations', (data) => {
+    // Append the number of Registrations left
+    if (data.id) {
+      document.querySelector('#remainingRegistrations').textContent = data.remaining_registrations
+      if (parseInt(data.remaining_registrations) <= 0) {
+        document.querySelector('#remainingRegistrations').classList.remove('has-text-info')
+        document.querySelector('#registrationResponse').textContent = 'Uh-Oh! We are at max capacity! Please try again next week.'
+        document.querySelector('#remainingRegistrations').classList.add('has-text-danger')
+        document.querySelector('#registrationForm').classList.add('is-hidden')
+      } else if (parseInt(data.remaining_registrations) <= 5) {
+        document.querySelector('#remainingRegistrations').classList.remove('has-text-info')
+        document.querySelector('#remainingRegistrations').classList.add('has-text-danger')
+      }
+    }
+  })
+
+  window.onload() = () => {
+    register.emit('get-num-registrations')
+
+    var submitSundayRegistration = document.querySelector('#submitSundayRegistration')
+    submitSundayRegistration.addEventListener('click', (e) => {
+      e.preventDefault()
+      var data = JSON.stringify({
+        regNum: parseInt(document.querySelector('#regParty').value),
+        regUser: parseInt(document.querySelector('#regUser').value),
+      })
+      register.emit('registration', data, (results) => {
+        document.querySelector('#registrationResponse').textContent = results.message
+        if (results.error) {
+          document.querySelector('#registrationResponse').classList.add('has-text-danger')
+        } else {
+          document.querySelector('#registrationResponse').classList.add('has-text-info')
+          document.querySelector('#registrationForm').classList.add('is-hidden')
+        }
+      })
+    })
+  }
+</script>

@@ -1,0 +1,48 @@
+<% sermons.forEach((s) => { %>
+<tr id="sermon-<%= s.id %>" data-id="<%= s.id %>" data-title="<%- s.title %>" data-date="<%- s.date %>" data-file="<%- s.file %>"
+  data-series="<%- s.series_id %>" data-service="<%- s.service_id %>" data-speaker="<%- s.speaker_id %>"
+  data-passage-start="<%- s.passage_start_id %>" data-passage-end="<%- s.passage_end_id %>">
+  <td style="width:110px;"><%- s.date %></td>
+  <td><%- s.title %></td>
+  <td><%- s.file %></td>
+  <td><%- s.first_name %> <%- s.last_name %></td>
+  <td><%- s.series_name %></td>
+  <td>
+    <div class="columns">
+      <div class="column">
+        <button class="button is-small is-warning edit-sermon" 
+          data-title="<%= s.title %>"
+          data-file="<%= s.file %>"
+          data-date="<%= s.date %>"
+          data-speaker="<%= s.speaker %>"
+          data-speaker-id="<%= s.speaker_id %>"
+          data-downloadfile="<%= s.downloadFile %>"
+          data-service="<%= s.service_name %>"
+          data-service-id="<%= s.service_id %>"
+          data-series="<%= s.series_name %>"
+          data-series-id="<%= s.series_id %>"
+          data-video="<%= s.video %>"
+          data-time="<%= s.time %>"
+          data-count="<%= s.count %>"
+          <% if(s.passage_start) { %>
+            data-passage-start-book="<%= s.passage_start.book_id %>"
+            data-passage-start-chapter="<%= s.passage_start.chapter %>"
+            data-passage-start-verse="<%= s.passage_start.verse %>"
+          <% } %>
+          <% if(s.passage_end) { %>
+            data-passage-end-book="<%= s.passage_end.book_id %>"
+            data-passage-end-chapter="<%= s.passage_end.chapter %>"
+            data-passage-end-verse="<%= s.passage_end.verse %>"
+          <% } %>
+          data-id-class=".sermon-<%= s.id %>"
+          data-id="<%= s.id %>"
+          id="edit-sermon-<%= s.id %>" onclick="support.editSermon(this)">Edit</button>
+      </div>
+      <div class="column">
+        <button class="button is-danger is-small delete-sermon" data-id="<%= s.id %>"
+          id="delete-sermon-<%= s.id %>" onclick="support.deleteSermon(this)">Delete</button>
+      </div>
+    </div>
+  </td>
+</tr>
+<% }) %>

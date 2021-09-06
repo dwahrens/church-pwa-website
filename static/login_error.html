@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <!-- Needs Title -->
+    <title>Church Website</title>>
+
+    <link rel="stylesheet" href="/static/css/bulma.min.css">
+    <link rel="stylesheet" href="/static/css/index.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/icons/png/apple-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/icons/png/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/icons/png/favicon-16x16.png">
+    <link rel="manifest" href="/public/manifest.json">
+</head>
+
+<body class="splash">
+    <main>
+        <article id="main" class="hero is-fullheight">
+            <div class="hero-body">
+                <section class="has-text-centered">
+                    <hr style="background-color:white;">
+                    <h2 class="is-size-4 has-text-white-ter"><i><b>There was an issue logging you in!</i></b>
+                    </h2>
+
+                    <h2 class="is-size-4 has-text-white-ter"><b>Please clear your browsers cache and cookies <i>with a
+                                time range of <u>all time</u></i> and try
+                            again.<b></h2>
+                    <h4 class="is-size-6 has-text-white-ter">Clearing your cache and cookies may also remove logins
+                        to other accounts and services.</h4>
+                    <a class="button is-medium is-info" target="_blank" href="" id="clearCache"></a>
+                    <br />
+                    <p class="is-size-6">Not working? Contact <a
+                            href="mailto: <%= settings.appSupportEmail %>"><%= settings.appSupportEmail %></a></p>
+                </section>
+            </div>
+        </article>
+    </main>
+</body>
+<script>
+    const chromeUrl = 'https://support.google.com/accounts/answer/32050?co=GENIE.Platform%3DDesktop&hl=en'
+    const firefoxUrl = 'https://support.mozilla.org/en-US/kb/delete-browsing-search-download-history-firefox'
+    const edgeUrl = 'https://support.microsoft.com/en-us/help/4027947/microsoft-edge-delete-cookies'
+    const safariIosUrl = 'https://support.apple.com/en-us/HT201265'
+    const safariUrl = 'https://support.apple.com/guide/safari/clear-your-browsing-history-sfri47acf5d6/mac'
+    let clearCache = document.querySelector('#clearCache')
+    // Detect ios first
+    if (navigator.userAgent.indexOf('iPhone') !== -1 || navigator.userAgent.indexOf('iPad') !== -1 || navigator.userAgent.indexOf('iPod') !== -1) {
+        clearCache.href = safariIosUrl
+        clearCache.innerText = "Clear Cache & Cookies for Safari"
+    } else if (navigator.userAgent.indexOf('Macintosh') !== -1 && navigator.userAgent.indexOf('Chrome') !== -1) {
+        clearCache.href = chromeUrl
+        clearCache.innerText = "Clear Cache & Cookies for Chrome"
+    } else if (navigator.userAgent.indexOf('Macintosh') !== -1 && navigator.userAgent.indexOf('Safari') !== -1) {
+        clearCache.href = safariUrl
+        clearCache.innerText = "Clear Cache & Cookies for Safari"
+    } else if (navigator.userAgent.indexOf("Edg") !== -1) {
+        clearCache.href = edgeUrl
+        clearCache.innerText = "Clear Cache & Cookies for Edge"
+    } else if (navigator.userAgent.indexOf("Chrome") !== -1) {
+        clearCache.href = chromeUrl
+        clearCache.innerText = "Clear Cache & Cookies for Chrome"
+    } else if (navigator.userAgent.indexOf("Mozilla") !== -1) {
+        clearCache.href = firefoxUrl
+        clearCache.innerText = "Clear Cache & Cookies for FireFox"
+    }
+</script>
+
+</html>

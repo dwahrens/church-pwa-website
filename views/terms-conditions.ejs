@@ -1,0 +1,25 @@
+<%- include('partials/header') %>
+<section id="privacy-policy" class="hero is-fullheight partial is-active <% if (!isMobile) { %>has-top-padding-notification<% } %>">
+  <article class="content is-fluid is-fullhd">
+    <div class="tile is-parent">
+      <div class="tile is-child is-light box is-vertical">
+        <h3 class="has-text-dark is-size-3 has-text-centered is-centered">
+          <i>Terms and Conditions</i>
+        </h3>
+        <hr class="is-dark" />
+        <h4 class="has-text-primary is-size-4">Contact Us</h4>
+        <p>
+          If you have any questions about these Terms and Conditions, You can
+          contact us:
+        </p>
+        <ul>
+          <li>By email: <%= settings.appSupportEmail %></li>
+        </ul>
+      </div>
+    </div>
+  </article>
+</section>
+<% if (isMobile) { %>
+<%- include('partials/more') %>
+<% } %>
+<%- include('partials/footer') %>

@@ -1,0 +1,204 @@
+<%- include('partials/header') %>
+<section id="user-profile" class="hero is-fullheight partial is-active <% if (!isMobile) { %>has-top-padding-notification<% } %>">
+  <article class="content is-fluid is-fullhd">
+    <div class="tile is-parent">
+      <div class="tile is-child is-light box is-vertical">
+        <h3 class="has-text-dark is-size-3 has-text-centered is-centered"><i>User Profile</i></h3>
+        <hr class="is-dark">
+        <p class="is-size-5">Name: <i id="userName"><%= user.first_name %> <%= user.last_name %></i></p>
+        <p class="is-size-5">Email: <i id="userEmail"><%= user.email %></i></p>
+        <p class="is-size-5">Phone: <i id="userPhone"><%= user.phone %> <%= user.carrier_id %></i></p>
+        <p class="is-size-5">Signed up for Alerts: <i
+            id="userAlerts"><% if(user.alerts == 1) { %>Yes<% } else { %>No<% } %></i></p>
+        <hr>
+        <form id="updateUserForm">
+          <p class="title is-size-4 has-text-centered has-text-dark">Update Your Details</p>
+          <p class="subtitle is-size-5 has-text-centered has-text-dark">* - This field is required</p>
+          <fieldset>
+            <div class="field">
+              <label class="label" for="email"> Email</label>
+              <div class="control">
+                <input class="input is-lmargin" id="email" type="email" placeholder="<%= user.email %>"
+                  value="<%= user.email %>">
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label" for="phone"><span class="has-text-danger">*</span> Phone
+                Number</label>
+              <div class="control">
+                <input class="input is-lmargin" name="phone" id="phone" type="tel"
+                  pattern="[0-9]{3}[0-9]{3}[0-9]{4}"
+                  placeholder="<% if (user.phone) { user.phone } else { %> 1234567890 <% } %>"
+                  value="<%= user.phone %>" required>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label" for="carrier">
+                Carrier (Optional)</label>
+              <div class="control">
+                <select class="input is-lmargin" name="carrier" id="carrier" name="carrier">
+                  <% carriers.forEach((carrier) => { %>
+                  <option value="<%= carrier.id %>" <% if (user.carrier == carrier.id) { %>selected=selected<% } %>>
+                    <%= carrier.name %></option>
+                  <% }) %>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label" for="fname"><span class="has-text-danger">*</span> First
+                Name</label>
+              <div class="control">
+                <input class="input is-lmargin" name="fname" id="fname" type="text"
+                  placeholder="<%= user.first_name %>" value="<%= user.first_name %>" required>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label" for="lname"><span class="has-text-danger">*</span> Last
+                Name</label>
+              <div class="control">
+                <input class="input is-lmargin" name="lname" id="lname" type="text"
+                  placeholder="<%= user.last_name %>" value="<%= user.last_name %>" required>
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                <label class="checkbox">
+                  <input class="checkbox is-medium-checkbox" name="allowAlerts" id="allowAlerts" type="checkbox"
+                    <% if (user.alerts == 1) { %>checked=checked<% } %> />
+                  <span class="is-medium">Please sign me up for Notifications</span>
+                </label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                <label class="checkbox">
+                  <input class="checkbox is-medium-checkbox" name="textAlerts" id="textAlerts" type="checkbox"
+                    <% if (user.text_alerts == 1) { %>checked=checked<% } %> />
+                  <span class="is-medium">You may text and email me Notifications (fees may apply for text
+                    messages)</span>
+                </label>
+              </div>
+            </div>
+            <div class="field">
+              <input type="hidden" name="uuid" id="uuid" value="<%= user.uuid %>" />
+              <button type="button" id="submitUserProfile" class="button is-info submit">Update Profile</button>
+            </div>
+          </fieldset>
+        </form>
+        <span id="updateUserMessage" class="is-hidden message is-size-5"></span>
+
+        <hr>
+        <p class="title is-size-4 has-text-centered has-text-dark">Update Your Password</p>
+        <form id="resetPassword" method="POST" action="/reset-password">
+          <fieldset>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="email">Password: </label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" name="password" id="password" type="password" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="email">Verify Password: </label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" name="verifyPassword" id="verifyPassword" type="password" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <input type="hidden" name="uuid" id="uuid" value="<%= user.uuid %>"/>
+            <button type="submit" class="button is-info is-pulled-right" id="submitPasswordReset">Reset Password</button>
+          </fieldset>
+        </form>
+        <span id="updateUserPassMessage" class="is-hidden message is-size-5"></span>
+      </div>
+    </div>
+  </article>
+</section>
+<script>
+  var submitPassword = document.querySelector('#submitPasswordReset')
+  submitPassword.addEventListener('click', (e) => {
+    e.preventDefault()
+    var body = JSON.stringify({
+      uuid: document.getElementById('uuid').value,
+      password: document.getElementById('password').value,
+      verifyPassword: document.getElementById('verifyPassword').value
+    })
+    let fetchData = {
+      method: 'POST',
+      body: body,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+    fetch('/reset-password', fetchData)
+      .then((resp) => resp.json())
+      .then((data) => {
+        // Request finished. Do processing here.
+        var message = document.getElementById('updateUserPassMessage')
+        message.innerText = ''
+        if (Array.isArray(data)) {
+          data.forEach(msg => {
+            message.innerText += msg.msg + ''
+          })
+        } else {
+          message.innerText = data.msg
+        }
+        message.classList.remove('is-hidden')
+        document.getElementById('password').value = ''
+        document.getElementById('verifyPassword').value = ''
+      })
+  })
+
+  var submitUserProfile = document.querySelector('#submitUserProfile')
+  submitUserProfile.addEventListener('click', function (e) {
+    e.preventDefault()
+    // Build the JSON
+    var jsonBody = JSON.stringify({
+      'first_name': document.getElementById('fname').value,
+      'last_name': document.getElementById('lname').value,
+      'phone': document.getElementById('phone').value,
+      'carrier': document.getElementById('carrier').value,
+      'email': document.getElementById('email').value,
+      'text_alerts': (document.getElementById('textAlerts').checked) ? 1 : 0,
+      'alerts': (document.getElementById('allowAlerts').checked) ? 1 : 0,
+      'uuid': document.getElementById('uuid').value
+    })
+    let fetchData = {
+      method: 'POST',
+      body: jsonBody,
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }
+    fetch('/update-member', fetchData)
+      .then((resp) => resp.json())
+      .then((data) => {
+        // Request finished. Do processing here.
+        var message = document.getElementById('updateUserMessage')
+        message.innerText = data.message
+        message.classList.remove('is-hidden')
+        document.querySelector('#userName').innerHTML = document.querySelector('#fname').value + ' ' + document.querySelector('#lname').value
+        document.querySelector('#userEmail').innerHTML = document.querySelector('#email').value
+        document.querySelector('#userPhone').innerHTML = document.querySelector('#phone').value
+        document.querySelector('#userAlerts').innerHTML = (document.querySelector('#allowAlerts').checked) ? 'Yes' : 'No'
+      })
+  })
+</script>
+<% if (isMobile) { %>
+<%- include('partials/more') %>
+<% } %>
+<%- include('partials/footer') %>

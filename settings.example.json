@@ -1,0 +1,23 @@
+{
+  "appName": "",
+  "appSessionSecret": "",
+  "appKey": "",
+  "appDb": "",
+  "appDbServer": "",
+  "appDbUser": "",
+  "appDbPassword": "",
+  "appEmail": "",
+  "appDonationEmail": "",
+  "appRegistrationEmail": "",
+  "appSupportEmail": "",
+  "appInquiryEmail": "",
+  "appPrayerEmail": "",
+  "churchName": "",
+  "domainName": "",
+  "mailApiKey": "",
+  "mailDomain": "",
+  "saltRounds": "",
+  "hash": "",
+  "ivLength": "",
+  "port": 3000
+}

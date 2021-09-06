@@ -1,0 +1,128 @@
+    <script src="/public/js/pwacompat.min.js"></script>
+    <script>
+      const newUserUrl = window.location.origin + '/user-io'
+      const newUser = io.connect(newUserUrl)
+
+      newUser.on('add-new-user', (data) => {
+        // Append the notifications
+        if (data) {
+          var nu = JSON.parse(data)
+          appendNewUser(nu)
+        }
+      })
+
+      newUser.on('notification', (data) => {
+        // Append the notifications
+        if (data) {
+          var newData = JSON.parse(data)
+          document.querySelector('#notification').innerHTML = newData.notification
+          document.querySelector('#notificationModal').classList.toggle('is-active')
+        }
+      })
+
+      // Get the user fname 
+
+      if (document.querySelector('#firstNameNotification') && document.querySelector('#userIdNotification')) {
+        let newUserJson = JSON.stringify({
+          'newUser': document.querySelector('#firstNameNotification').value,
+          'userId': document.querySelector('#userIdNotification').value
+        })
+        //newUser.broadcast.emit('new-user', newUserJson)
+        newUser.emit('new-user', newUserJson)
+      }
+
+      // need to split the public functionality with the private
+      let isInStandaloneMode = (('standalone' in window.navigator) && (window.navigator.standalone)) ? true : false
+
+      if (navigator.serviceWorker) {
+        navigator.serviceWorker.register('/public/service-worker.js')
+      }
+
+      // initialize session users array
+      let users = []
+      sessionStorage.setItem('users', JSON.stringify(users))
+
+      // Every three seconds check which users notification has expired.
+      setTimeout(checkCurrentUsers, 3000)
+
+      function checkCurrentUsers() {
+        let users = JSON.parse(sessionStorage.getItem('users'))
+        let currentTime = Date.now()
+        if (users.length > 0) {
+          users.forEach((u) => {
+            if ((currentTime - u.setTime) > 3000) {
+              document.querySelector('#user-' + u.userId + '-' + u.setTime).classList.add('is-hidden')
+            }
+          })
+        }
+        setTimeout(checkCurrentUsers, 3000)
+      }
+
+      function createCookie(name, value, days) {
+        var date, expires
+        if (days) {
+          date = new Date()
+          date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000))
+          expires = '; expires=' + date.toGMTString()
+        } else {
+          expires = ''
+        }
+        document.cookie = name + '=' + value + expires + '; path=/'
+      }
+
+      function getCookie(name) {
+        var dc = document.cookie;
+        var prefix = name + '=';
+        var begin = dc.indexOf('; ' + prefix);
+        if (begin == -1) {
+          begin = dc.indexOf(prefix);
+          if (begin != 0) return null;
+        }
+        else {
+          begin += 2;
+          var end = document.cookie.indexOf(';', begin);
+          if (end == -1) {
+            end = dc.length;
+          }
+        }
+        // because unescape has been deprecated, replaced with decodeURI
+        //return unescape(dc.substring(begin + prefix.length, end));
+        return decodeURI(dc.substring(begin + prefix.length, end));
+      }
+
+      function appendNewUser(data) {
+        // Get current list of users
+        data.setTime = Date.now()
+        let users = JSON.parse(sessionStorage.getItem('users'))
+        if (!users.filter(user => {
+          user.newUser === data.newUser
+        })) {
+          users.push(data)
+          sessionStorage.setItem('users', JSON.stringify(users))
+
+          // show notification for 3 seconds
+          let div = document.createElement('div')
+          div.classList.add('is-small-notification', 'notification', 'is-info')
+          div.id = 'user-' + data.userId + '-' + data.setTime
+          let button = document.createElement('button')
+          button.classList.add('delete')
+          button.onclick = (e) => {
+            e.preventDefault()
+            document.querySelector('#user-' + data.userId + '-' + data.setTime).classList.add('is-hidden')
+          }
+          let span = document.createElement('span')
+          span.innerText = data.newUser + ' has joined!'
+          span.classList.add('is-size-7')
+          div.appendChild(span)
+          div.appendChild(button)
+          document.querySelector('#notificationArea').appendChild(div)
+        }
+      }
+    </script>
+    <% if (page === 'sermons') { %>
+    <script src="/public/js/plyr.min.js"></script>
+    <% } %>
+  </main>
+</body>
+
+</html>

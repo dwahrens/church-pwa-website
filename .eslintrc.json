@@ -1,0 +1,21 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2020": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "ecmaVersion": 11,
+        "sourceType": "module"
+    },
+    "globals": {
+        "_": "readonly",
+        "__dirname": "readonly",
+        "process": "readonly",
+        "Buffer": "readonly"
+    },
+    "rules": {
+        "no-unused-vars": ["warning", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }]
+    }
+}

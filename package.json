@@ -1,0 +1,81 @@
+{
+  "name": "church-pwa-website",
+  "version": "0.0.1",
+  "description": "Provides a complete web app for churches to use. Features Livestreams, sermons, daily devotionals, a prayer request board and much more.",
+  "author": "dwahrens",
+  "license": "LICENSE",
+  "main": "app.js",
+  "scripts": {
+    "css-build": "node-sass --omit-source-map-url sass/app.scss ./static/css/bulma.css",
+    "css-build-min": "node-sass --omit-source-map-url sass/app.scss ./static/css/bulma.min.css --output-style compressed",
+    "css-watch": "npm run css-build -- --watch",
+    "css-purge": "npm run css-build-min && node scripts/purgeCss.js",
+    "start": "nodejs app.js",
+    "build": "npm run css-build-min && copy-files-from-to",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dwahrens/church-pwa-website.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dwahrens/church-pwa-website/issues"
+  },
+  "homepage": "https://github.com/dwahrens/church-pwa-website#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "bulma": "^0.9.1",
+    "bulma-timeline": "^3.0.4",
+    "cookie-parser": "^1.4.5",
+    "copy-files-from-to": "^3.2.0",
+    "dotenv": "^8.6.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-mysql-session": "^2.1.6",
+    "express-rate-limit": "^5.3.0",
+    "express-session": "^1.17.1",
+    "express-useragent": "^1.0.15",
+    "helmet": "^3.23.2",
+    "mailgun-js": "^0.22.0",
+    "mp3-duration": "^1.1.0",
+    "multer": "^1.4.2",
+    "mysql2": "^2.2.5",
+    "node-cron": "^2.0.3",
+    "node-mailjet": "^3.3.4",
+    "node-sass": "^6.0.1",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "path": "^0.12.7",
+    "plyr": "^3.6.7",
+    "snyk": "^1.667.0",
+    "socket.io": "^3.1.2",
+    "socket.io-client": "^4.1.2"
+  },
+  "copyFiles": [
+    {
+      "from": "node_modules/plyr/dist/plyr.min.js",
+      "to": "static/js/plyr.min.js"
+    },
+    {
+      "from": "node_modules/plyr/dist/plyr.min.js.map",
+      "to": "static/js/plyr.min.js.map"
+    },
+    {
+      "from": "node_modules/plyr/dist/plyr.css",
+      "to": "static/css/plyr.css"
+    },
+    {
+      "from": "node_modules/@creativebulma/bulma-tooltip/dist/bulma-tooltip.min.css",
+      "to": "static/css/bulma-tooltip.min.css"
+    }
+  ],
+  "devDependencies": {
+    "@creativebulma/bulma-tooltip": "^1.2.0",
+    "eslint": "^7.16.0",
+    "nodemon": "^2.0.7",
+    "purgecss": "^3.1.3"
+  },
+  "snyk": true
+}

@@ -1,0 +1,47 @@
+<% dailyDevos.forEach((dailyDevo) => { %>
+<div class="card">
+  <header class="card-header has-text-centered">
+    <p class="card-header-title is-size-4">
+      <a href="#daily-devo-<%= dailyDevo.id %>" class="daily-devo-header"><%= dailyDevo.title %></a>
+    </p>
+  </header>
+  <div
+    id="daily-devo-<%= dailyDevo.id %>"
+    data-video-embedded="<%= dailyDevo.embedded_url %>"
+    data-video-url="<%=dailyDevo.url %>"
+    data-video-id="#dailyDevoVideo-<%= dailyDevo.id %>"
+    class="daily-devo-video is-hidden"
+  >
+    <div class="card-content has-text-centered">
+      <a href="<%= dailyDevo.url %>" class="button is-primary" target="_blank" rel="noreferrer">
+        <img class="is-white-icon image is-centered is-bottom-nav-image has-right-margin" src="/public/icons/svg/youtube.svg" width="20" height="20" />Watch on YouTube</a
+      >
+      <div class="video-responsive daily-devo">
+        <iframe
+          id="dailyDevoVideo-<%= dailyDevo.id %>"
+          frameborder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          class="is-tile-centered"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+<% }) %>
+<div class="has-top-padding">
+  <form target="/devoPagination">
+    <fieldset>
+      <input type="hidden" value="<%= dailyDevos[dailyDevos.length-1].id %>" id="lastDevo" name="lastDevo" />
+      <input type="hidden" value="<%= dailyDevos[0].id %>" id="firstDevo" name="firstDevo" />
+      <div class="columns">
+        <div class="column has-text-centered is-centered">
+          <input type="submit" class="button is-primary" value="Previous Devos" id="prevDevos" />
+        </div>
+        <div class="column has-text-centered is-centered">
+          <input type="submit" class="button is-primary" value="Next Devos" id="nextDevos" />
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>

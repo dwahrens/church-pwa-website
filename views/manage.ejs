@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Church Website</title>
+
+    <link rel="stylesheet" href="/public/css/bulma.min.css" />
+    <link rel="stylesheet" href="/public/css/index.css" />
+  </head>
+
+  <body>
+    <main>
+      <nav id="page-nav" class="navbar is-transparent is-fixed-top is-dark">
+        <div class="navbar-brand">
+          <a class="navbar-item spa is-hoverable" href="/public/livestream"><img src="./public/icons/svg/ufo.svg" class="is-white-icon icon is-pulled-left"/><span class="has-text-right" style="margin-left:0.5rem;">Home</span></a>
+          <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
+        <div id="navMenu" class="navbar-menu">
+          <div class="navbar-start"></div>
+          <div class="navbar-end">
+            <a class="navbar-item spa is-hoverable" href="#members">Members</a>
+            <a class="navbar-item spa is-hoverable" href="#videos">Videos</a>
+            <a class="navbar-item spa is-hoverable" href="#recommendedReading">Reading</a>
+            <a class="navbar-item spa is-hoverable" href="#addSermons">Sermons</a>
+            <a class="navbar-item spa is-hoverable" href="#addEvents">Events</a>
+          </div>
+        </div>
+      </nav>
+      <section id="main" class="hero splash" style="margin-top:2rem;">
+        <article id="members" class="content has-text-centered">
+          <div class="tile is-ancestor">
+            <div class="tile is-parent">
+              <div class="tile is-light box is-tile-centered is-vertical">
+                <h3 class="is-header is-3">Manage Members</h3>
+                <p id="addUserMessage" class="is-hidden message is-size-5"></p>
+                <div class="table-container">
+                  <table class="table is-narrow is-fullwidth is-striped">
+                    <thead>
+                      <tr>
+                        <td>Id</td>
+                        <td>First Name</td>
+                        <td>Last Name</td>
+                        <td>Phone</td>
+                        <td>Email</td>
+                        <td>Notifications</td>
+                        <td>Administrator</td>
+                        <td>Approved</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% members.forEach((member) => { %>
+                      <tr>
+                        <td><%= member.uuid %></td>
+                        <td><%= member.first_name %></td>
+                        <td><%= member.last_name %></td>
+                        <td><%= member.phone %></td>
+                        <td><%= member.email %></td>
+                        <td>
+                          <% if (member.alerts !== 1) { %>
+                            <b class="has-text-primary">No</b>
+                          <% } else { %>
+                            <b>Yes</b>
+                          <% } %>
+                        </td>
+                        <td>
+                          <% if (member.is_admin === 0 && member.is_approved === 1) { %>
+                            <button
+                            class="button is-small is-primary make-admin"
+                            data-uuid="<%= member.uuid %>"
+                            id="make-admin-<%= member.uuid %>"
+                          >
+                            Make Admin
+                          </button>
+                          <% } else if (member.is_admin === 1 && member.is_approved === 1) { %>
+                            <button
+                            class="button is-small is-info remove-admin"
+                            data-uuid="<%= member.uuid %>"
+                            id="remove-admin-<%= member.uuid %>"
+                          >
+                            Remove Admin
+                          </button>
+                          <% } %>
+                        </td>
+                        <td>
+                          <% if (member.is_approved === 2) { %>
+                          <b class="has-text-primary">No</b>
+                          <% } else if (member.is_approved === 0) { %>
+                          <button
+                            class="button is-primary is-small approve"
+                            data-email="<%= member.email %>"
+                            data-name="<%= member.last_name %>"
+                            data-uuid="<%= member.uuid %>"
+                            id="approve-<%= member.uuid %>"
+                          >
+                            Approve
+                          </button>
+                          <button
+                            class="button is-info is-small disapprove"
+                            data-email="<%= member.email %>"
+                            data-name="<%= member.last_name %>"
+                            data-uuid="<%= member.uuid %>"
+                            id="disapprove-<%= member.uuid %>"
+                          >
+                            Disapprove
+                          </button>
+                          <% } else { %>
+                          <b>Yes</b>
+                          <% } %>
+                        </td>
+                      </tr>
+                      <% }) %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+        <!-- Convert everything over to use placeholders -->
+        <article id="videos" class="content has-text-centered">
+          <div class="tile is-ancestor">
+            <div class="tile is-parent">
+              <div class="tile is-light box is-tile-centered is-vertical">
+                <h3 class="is-header is-3">Add a Video</h3>
+                <p id="addVideoMessage" class="is-hidden message is-size-5"></p>
+                <form id="addVideo">
+                  <fieldset>
+                    <div class="field is-horizontal">
+                      <div class="field">
+                        <div class="control is-expanded">
+                          <div class="select is-fullwidth">
+                            <select id="tag" name="tag" placeholder="Video Tag">
+                              <% videoTags.forEach((vt) => { %>
+                              <option value="<%= vt.id %>"><%= vt.tag %></option>
+                              <% }) %>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="field-body">
+                        <div class="field">
+                          <div class="control is-expanded">
+                            <input id="url" name="url" class="input is-fullwidth" type="text" placeholder="Video URL" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="field-body">
+                        <div class="field">
+                          <div class="control is-expanded">
+                            <label class="checkbox">
+                              <input id="livestream" name="livestream" type="checkbox" checked="checked" />
+                              Livestream
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="field-body">
+                        <div class="field">
+                          <div class="control is-expanded">
+                            <label class="checkbox">
+                              <input id="videoPrivate" name="videoPrivate" type="checkbox" />
+                              Private
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <input type="submit" id="submitVideo" class="button is-info" value="Submit Video" />
+                  </fieldset>
+                </form>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="content has-text-centered">
+          <div class="tile is-ancestor">
+            <div class="tile is-parent">
+              <div class="tile is-light box is-tile-centered is-vertical">
+                <h3 class="is-header is-3">Send a Notification to Users</h3>
+                <p class="is-size-5">Notifications are not saved and will be emailed to users.</p>
+                <p id="notificationMessage" class="message is-size-5"></p>
+                <form id="sendNotification">
+                  <fieldset>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control is-expanded">
+                          <textarea class="textarea" placeholder="Enter the Notification" id="notification" name="notification" required></textarea>
+                        </div>
+                      </div>
+                    </div>
+                    <br />
+                    <input type="submit" id="submitNotification" class="button is-info" value="Submit Notification" />
+                  </fieldset>
+                </form>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article id="recommendedReading" class="content has-text-centered">
+          <div class="tile is-ancestor">
+            <div class="tile is-parent">
+              <div class="tile is-light box is-tile-centered is-vertical">
+                <h3 class="is-header is-3">Add a Recommended Reading</h3>
+                <p id="readingMessage" class="message is-size-5"></p>
+                <form id="addRecommendedReading">
+                  <fieldset>
+                    <div class="field has-addons">
+                      <div class="control is-expanded">
+                        <div class="select is-fullwidth">
+                          <select id="readingAuthor" name="readingAuthor">
+                            <% authors.forEach((s) => { %>
+                            <option value="<%= s.id %>"><%= s.first_name %> <%= s.last_name %></option>
+                            <% }) %>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="control">
+                        <a href="#addAuthor" id="addAuthorButton" class="button is-info">Add Author</a>
+                      </div>
+                    </div>
+                    <div class="field is-grouped">
+                      <div class="field-body">
+                        <div class="field">
+                          <p class="control is-expanded">
+                            <input id="readingTitle" name="readingTitle" class="input" type="text" placeholder="Title" />
+                          </p>
+                        </div>
+                        <div class="field">
+                          <p class="control is-expanded">
+                            <input id="readingLink" name="readingLink" class="input" type="text" placeholder="Link" />
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <br />
+                    <input type="submit" id="submitReading" class="button is-info" value="Submit Reading" />
+                  </fieldset>
+                </form>
+                <div class="table-container"
+                  <table class="table is-narrow is-fullwidth is-hoverable is-striped">
+                    <thead>
+                      <tr>
+                        <td>Book Title</td>
+                        <td>Author</td>
+                        <td>Modify</td>
+                      </tr>
+                    </thead>
+                    <tbody id="reading"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+        <!--<article class="content has-text-centered">
+        <div class="tile is-ancestor">
+          <div class="tile is-parent">
+            <div class="tile is-light box is-tile-centered is-vertical">
+              <h3 class="is-header is-3">Email Users</h3>
+              <p id="emailUsersMessage" class="message is-size-5"></p>
+              <form id="sendUsersEmail">
+                <fieldset>
+                  <div class="field-body">
+                    <div class="field">
+                      <div class="control is-expanded">
+                        <textarea class="textarea" placeholder="Enter the body of the email" id="emailUsers"
+                          name="emailUsers" required></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <br />
+                  <input type="submit" id="submitEmailUsers" class="button is-info" value="Submit Email" />
+                </fieldset>
+              </form>
+            </div>
+          </div>
+        </div>
+      </article>-->
+        <!-- Gotta add the form to setup the registration each Sunday. -->
+        <% if (registration) { %>
+        <article id="registration" class="content has-text-centered is-last-tile">
+          <div class="tile is-ancestor">
+            <div class="tile is-parent">
+              <div class="tile is-light box is-tile-centered is-vertical">
+                <h3 class="is-header is-size-3">Add a Registration</h3>
+                <p id="addRegistrationMessage" class="message is-size-5"></p>
+                <form id="addRegistration">
+                  <fieldset>
+                    <div class="field is-horizontal">
+                      <div class="field-label">
+                        <label for="regDate" class="label is-normal">Registration Date</label>
+                      </div>
+                      <div class="field-body">
+                        <div class="field">
+                          <div class="control">
+                            <input id="regDate" name="regDate" class="input" type="date" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="field is-horizontal">
+                      <div class="field-label">
+                        <label for="regType" class="label is-normal">Registration Type</label>
+                      </div>
+                      <div class="field-body">
+                        <div class="field">
+                          <div class="control">
+                            <div class="select">
+                              <select id="regType" name="regType">
+                                <option value="1" selected="selected">Sunday Morning</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="field is-horizontal">
+                      <div class="field-label">
+                        <label for="regNum" class="label is-normal">Number of Registrations</label>
+                      </div>
+                      <div class="field-body">
+                        <div class="field">
+                          <div class="control">
+                            <input id="regNum" name="regNum" class="input" type="number" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <input type="submit" id="submitReg" class="button is-info" value="Submit Registration" />
+                  </fieldset>
+                </form>
+              </div>
+            </div>
+          </div>
+        </article>
+        <% } %>
+        <!-- Add another form to add a registration type, useful for future registration activities I.E. Womens Conference, VBS, etc. -->
+      </section>
+      <!-- Another whole article for the Sermons information, add a Sermon (with Video), Speaker, Service and Series -->
+      <section class="hero splash">
+        <article id="addSermons" class="content has-text-centered is-last-tile">
+          <div class="tile is-ancestor">
+            <div class="tile is-parent">
+              <div class="tile is-light box is-tile-centered is-vertical">
+                <h3 class="is-header is-size-3">Sermons</h3>
+                <p id="addSermonMessage" class="message is-size-5"></p>
+                <div class="columns">
+                  <div class="column">
+                    <button class="button is-small is-primary" id="addASermonButton">Add a Sermon</button>
+                  </div>
+                  <div class="column">
+                    <button class="button is-small is-info" id="addSpeakerButton">Add Speaker</button>
+                  </div>
+                  <div class="column">
+                    <button id="addSeriesButton" class="button is-small is-info">Add Series</button>
+                  </div>
+                  <div class="column">
+                    <button id="addServiceButton" class="button is-small is-info">Add Service</button>
+                  </div>
+                </div>
+                <div class="table-container">
+                  <table class="sermons-table table is-narrow is-fullwidth is-hoverable is-striped">
+                    <thead>
+                      <tr>
+                        <th class="is-size-5" style="width: 110px"><i>Date</i></th>
+                        <th class="is-size-5"><i>Title</i></th>
+                        <th class="is-size-5"><i>File</i></th>
+                        <th class="is-size-5"><i>Speaker</i></th>
+                        <th class="is-size-5"><i>Series</i></th>
+                        <th class="is-size-5"><i>Modify</i></th>
+                      </tr>
+                    </thead>
+                    <tbody id="sermons">
+                      <% if (sermons) { %> <%- include('partials/sermons-manage') %> <% } %>
+                    </tbody>
+                  </table>
+                </div>
+                <div id="sermonPagination"><%- include('partials/sermons-manage-pagination') %></div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+      <section class="hero splash">
+        <article id="addEvents" class="content has-text-centered">
+          <div class="tile is-ancestor">
+            <div class="tile is-parent">
+              <div class="tile is-light box is-tile-centered is-vertical">
+                <h3 class="is-header is-size-3">Events</h3>
+                <p id="addEventMessage" class="message is-size-5"></p>
+                <div class="columns">
+                  <div class="column">
+                    <button id="addEventButton" class="button is-small is-primary" style="width: max-content;">Add Event</button>
+                  </div>
+                </div>
+                <!--<form id="addEvent">
+                <fieldset>
+                  <div class="field is-horizontal">
+                    <div class="field-label">
+                      <label for="eventTitle" class="label is-normal">Event Title</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                          <input type="text" id="eventTitle" name="eventTitle" class="input">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field is-horizontal">
+                    <div class="field-label">
+                      <label for="eventDate" class="label is-normal">Event Date</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                          <input id="eventDate" name="eventDate" class="input" type="date">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field is-horizontal">
+                    <div class="field-label">
+                      <label for="eventStartTime" class="label is-normal">Event Start Time</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                          <input id="eventStartTime" name="eventStartTime" class="input" type="time">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field is-horizontal">
+                    <div class="field-label">
+                      <label for="eventEndTime" class="label is-normal">Event End Time</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                          <input id="eventEndTime" name="eventEndTime" class="input" type="time">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <div class="control">
+                      <label class="checkbox">
+                        <input class="checkbox is-medium-checkbox" name="eventPrivate" id="eventPrivate"
+                          type="checkbox" />
+                        <span class="is-medium">Member Only Event</span>
+                      </label>
+                    </div>
+                  </div>
+                  <input type="submit" id="submitEvent" class="button is-info" value="Submit Event" />
+                </fieldset>
+              </form>
+              <br />-->
+              <div class="table-container">
+                <table class="events-table table is-narrow is-fullwidth is-hoverable is-striped">
+                  <thead>
+                    <tr id="eventsHeader">
+                      <th class="is-size-5"><i>Title</i></th>
+                      <th class="is-size-5"><i>Date</i></th>
+                      <th class="is-size-5"><i>Start Time</i></th>
+                      <th class="is-size-5"><i>End Time</i></th>
+                      <th class="is-size-5"><i>Private Event</i></th>
+                      <th class="is-size-5"><i>Delete</i></th>
+                    </tr>
+                  </thead>
+                  <tbody id="events">
+                    <% if (events) { %> <% events.forEach((ev) => { %>
+                    <tr id="event-<%= ev.id %>" class="event-row">
+                      <td id="event-<%= ev.id %>-title"><%- ev.title %></td>
+                      <td id="event-<%= ev.id %>-date"><%- ev.date %></td>
+                      <td id="event-<%= ev.id %>-start-time"><%- ev.start_time %></td>
+                      <td id="event-<%= ev.id %>-end-time"><%- ev.end_time %></td>
+                      <td id="event-<%= ev.id %>-is-private"><% if (ev.is_member_private == 1) { %>Yes<% } else { %>No<% } %></td>
+                      <td>
+                        <button class="button is-small is-warning modify-event" data-id="<%= ev.id %>" id="modify-event-<%= ev.id %>" data-title="<%= ev.title %>" data-date="<%= ev.date %>" data-start-time="<%= ev.start_time %>" data-end-time="<%= ev.end_time %>" data-is-member-private="<%= ev.is_member_private %>" onclick="support.editEvent(this)">Edit</button>
+                        <button class="button is-small is-danger delete-event" data-id="<%= ev.id %>" id="delete-event-<%= ev.id %>" onclick="support.deleteEvent(this)">Delete</button>
+                      </td>
+                    </tr>
+                    <% }) %> <% } %>
+                  </tbody>
+                </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+      <!-- Contains Modals for Speaker, Series and Service-->
+      <section id="modals">
+        <div id="authorModal" class="modal">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Add Author</p>
+              <button class="delete close-modal" aria-label="close"></button>
+            </header>
+            <article class="modal-card-body">
+              <form>
+                <fieldset>
+                  <div class="field is-horizontal">
+                    <div class="field-label">
+                      <label for="addAuthorFirstName" class="label is-normal">First Name</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                          <input id="addAuthorFirstName" name="addAuthorFirstName" class="input" type="text" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field is-horizontal">
+                    <div class="field-label">
+                      <label for="addAuthorLastName" class="label is-normal">Last Name</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                          <input id="addAuthorLastName" name="addAuthorLastName" class="input" type="text" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <input type="submit" class="button is-info" id="submitAuthor" />
+                </fieldset>
+              </form>
+            </article>
+          </div>
+        </div>
+        <div id="speakerModal" class="modal">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Add Speaker</p>
+              <button class="delete close-modal" aria-label="close"></button>
+            </header>
+            <article class="modal-card-body">
+              <form>
+                <fieldset>
+                  <div class="field is-horizontal">
+                    <div class="field-label">
+                      <label for="addSpeakerFirstName" class="label is-normal">First Name</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                          <input id="addSpeakerFirstName" name="addSpeakerFirstName" class="input" type="text" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field is-horizontal">
+                    <div class="field-label">
+                      <label for="addSpeakerLastName" class="label is-normal">Last Name</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                          <input id="addSpeakerLastName" name="addSpeakerLastName" class="input" type="text" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <input type="submit" class="button is-info is-pulled-right" id="submitSpeaker" />
+                </fieldset>
+              </form>
+              <table class="table is-narrow is-fullwidth is-striped">
+                <thead>
+                  <th>ID</th>
+                  <th>Name</th>
+                </thead>
+                <tbody>
+                  <% speakers.forEach((s) => { %>
+                   <tr><td><%= s.id %></td><td><%= s.first_name %> <%= s.last_name %></td></tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </article>
+          </div>
+        </div>
+        <div id="seriesModal" class="modal">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Add Series</p>
+              <button class="delete close-modal" aria-label="close"></button>
+            </header>
+            <article class="modal-card-body">
+              <form>
+                <fieldset>
+                  <div class="field is-horizontal">
+                    <div class="field-label">
+                      <label for="addSeriesName" class="label is-normal">Name</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                          <input id="addSeriesName" name="addSeriesName" class="input" type="text" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <input type="submit" class="button is-info is-pulled-right" id="submitSeries" />
+                </fieldset>
+              </form>
+              <table class="table is-narrow is-fullwidth is-striped">
+                <thead>
+                  <th>ID</th>
+                  <th>Name</th>
+                </thead>
+                <tbody>
+                  <% series.forEach((s) => { %>
+                   <tr><td><%= s.id %></td><td><%= s.name %></td></tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </article>
+          </div>
+        </div>
+        <div id="serviceModal" class="modal">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Add Service</p>
+              <button class="delete close-modal" aria-label="close"></button>
+            </header>
+            <article class="modal-card-body">
+              <form>
+                <fieldset>
+                  <div class="field is-horizontal">
+                    <div class="field-label">
+                      <label for="addServiceName" class="label is-normal">Name</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                          <input id="addServiceName" name="addServiceName" class="input" type="text" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field is-horizontal">
+                    <div class="field-label">
+                      <label for="addSeriesTime" class="label is-normal">Time</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                          <input id="addServiceTime" name="addServiceTime" class="input" type="time" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <input type="submit" class="button is-info is-pulled-right" id="submitService" />
+                </fieldset>
+              </form>
+              <table class="table is-narrow is-fullwidth is-striped">
+                <thead>
+                  <th>ID</th>
+                  <th>Name</th>
+                </thead>
+                <tbody>
+                  <% services.forEach((s) => { %>
+                   <tr><td><%= s.id %></td><td><%= s.name %></td></tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </article>
+          </div>
+        </div>
+        <div id="sermonModal" class="modal">
+          <div class="modal-background"></div>
+          <div class="modal-card" style="width: 80%">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Sermon</p>
+              <button class="delete close-modal" aria-label="close"></button>
+            </header>
+            <div class="modal-card-body">
+              <form id="sermon">
+                <fieldset>
+                  <input type="hidden" id="sermonId" name="sermonId" value="" />
+                  <div class="field is-grouped">
+                    <div class="field-body">
+                      <div class="field">
+                        <p class="control is-expanded">
+                          <input id="sermonTitle" name="sermonTitle" class="input" type="text" placeholder="Title" />
+                        </p>
+                      </div>
+                      <div class="field">
+                        <p class="control is-expanded">
+                          <!-- this needs to be a select with each sermon video id and title -->
+                          <input id="sermonVideo" name="sermonVideo" class="input" type="text" placeholder="Video URL" />
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field is-grouped">
+                    <div class="field-body">
+                      <div class="field">
+                        <p class="control is-expanded">
+                          <input id="sermonFile" name="sermonFile" class="input" type="text" placeholder="File" />
+                        </p>
+                      </div>
+                      <div class="field">
+                        <p class="control is-expanded">
+                          <input id="sermonDate" name="sermonDate" class="input" type="date" placeholder="MM/DD/YYYY" value="" />
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field has-addons">
+                    <div class="control is-expanded">
+                      <div class="select is-fullwidth">
+                        <select id="sermonSpeaker" name="sermonSpeaker">
+                          <% speakers.forEach((s) => { %>
+                          <option value="<%= s.id %>"><%= s.first_name %> <%= s.last_name %></option>
+                          <% }) %>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field has-addons">
+                    <div class="control is-expanded">
+                      <div class="select is-fullwidth">
+                        <select id="sermonSeries" name="sermonSeries">
+                          <% series.forEach((s) => { %>
+                          <option value="<%= s.id %>"><%= s.name %></option>
+                          <% }) %>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field has-addons">
+                    <div class="control is-expanded">
+                      <div class="select is-fullwidth">
+                        <select id="sermonService" name="sermonService">
+                          <% services.forEach((s) => { %>
+                          <option value="<%= s.id %>"><%= s.name %></option>
+                          <% }) %>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="subtitle is-size-5">Starting Passage</p>
+                  <div class="content">
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control is-expanded">
+                          <div class="select is-fullwidth">
+                            <select id="sermonStartPassageBook" name="sermonStartPassageBook">
+                              <% books.forEach((b) => { %>
+                              <option value="<%= b.id %>"><%= b.name %></option>
+                              <% }) %>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="field">
+                        <div class="control">
+                          <input
+                            type="number"
+                            class="input"
+                            id="sermonStartPassageChapter"
+                            name="sermonStartPassageChapter"
+                            placeholder="Chapter Number"
+                          />
+                        </div>
+                      </div>
+                      <div class="field">
+                        <div class="control">
+                          <input type="number" class="input" id="sermonStartPassageVerse" name="sermonStartPassageVerse" placeholder="Verse Number" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="subtitle is-size-5">Ending Passage</p>
+                  <div class="content">
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control is-expanded">
+                          <div class="select is-fullwidth">
+                            <select id="sermonEndPassageBook" name="sermonEndPassageBook">
+                              <% books.forEach((b) => { %>
+                              <option value="<%= b.id %>"><%= b.name %></option>
+                              <% }) %>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="field">
+                        <div class="control">
+                          <input type="number" class="input" id="sermonEndPassageChapter" name="sermonEndPassageChapter" placeholder="Chapter Number" />
+                        </div>
+                      </div>
+                      <div class="field">
+                        <div class="control">
+                          <input type="number" class="input" id="sermonEndPassageVerse" name="sermonEndPassageVerse" placeholder="Verse Number" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <input type="submit" id="submitSermon" class="button is-info is-pulled-right" value="Submit Sermon" />
+                </fieldset>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div id="eventModal" class="modal">
+          <div class="modal-background"></div>
+          <div class="modal-card" style="width: 80%">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Event</p>
+              <button class="delete close-modal" aria-label="close"></button>
+            </header>
+            <div class="modal-card-body">
+              <form id="event">
+                <fieldset>
+                  <input type="hidden" id="eventId" name="eventId" />
+                  <div class="field is-horizontal">
+                    <div class="field-label">
+                      <label for="eventTitle" class="label is-normal">Event Title</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                          <input type="text" id="eventTitle" name="eventTitle" class="input" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field is-horizontal">
+                    <div class="field-label">
+                      <label for="eventDate" class="label is-normal">Event Date</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                          <input id="eventDate" name="eventDate" class="input" type="date" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field is-horizontal">
+                    <div class="field-label">
+                      <label for="eventStartTime" class="label is-normal">Event Start Time</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                          <input id="eventStartTime" name="eventStartTime" class="input" type="time" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field is-horizontal">
+                    <div class="field-label">
+                      <label for="eventEndTime" class="label is-normal">Event End Time</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                          <input id="eventEndTime" name="eventEndTime" class="input" type="time" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <div class="control">
+                      <label class="checkbox">
+                        <input class="checkbox is-medium-checkbox" name="eventPrivate" id="eventPrivate" type="checkbox" />
+                        <span class="is-medium has-text-primary">Member Only Event</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <div class="control">
+                      <label class="checkbox">
+                        <input class="checkbox is-medium-checkbox" name="eventBoard" id="eventBoard" type="checkbox" />
+                        <span class="is-medium has-text-primary">Elder/Deacon Board Only Event</span>
+                      </label>
+                    </div>
+                  </div>
+                  <input type="submit" id="submitEvent" class="button is-info is-pulled-right" value="Submit Event" />
+                </fieldset>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const approve_url = '/approve-user'
+      const disapprove_url = '/disapprove-user'
+      const admin_url = '/make-admin'
+      const remove_admin_url = '/remove-admin'
+      const add_video_url = '/add-video'
+      const add_sermon_url = '/add-sermon'
+      const add_speaker_url = '/add-speaker'
+      const add_series_url = '/add-series'
+      const add_service_url = '/add-service'
+      const add_reading_url = '/add-reading'
+      const add_author_url = '/add-author'
+      const delete_sermon_url = '/delete-sermon'
+      const add_event_url = '/add-event'
+      const delete_event_url = '/delete-event'
+      const email_users_url = '/notify-users'
+      const userUrl = window.location.origin + '/user-io'
+      // eslint-disable-next-line no-undef
+      const users = io.connect(userUrl)
+
+      let support = {
+        postData: (data, url, next) => {
+          let fetchData = {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+          fetch(url, fetchData)
+            .then((resp) => resp.json())
+            .then((data) => {
+              //let id = parseInt(data.id)
+              next(data)
+            })
+        },
+        editEvent: (event) => {
+          // clone everything to the modal
+          //event.preventDefault()
+          var date = new Date(event.dataset.date).toISOString().substring(0,10)
+          //var newdate= (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear()
+          document.querySelector('#eventTitle').value = event.dataset.title
+          document.querySelector('#eventDate').value = date
+          document.querySelector('#eventStartTime').value = event.dataset.startTime
+          document.querySelector('#eventEndTime').value = event.dataset.endTime
+          document.querySelector('#eventPrivate').value = event.dataset.isMemberPrivate
+          document.querySelector('#eventId').value = event.dataset.id
+          document.querySelector('#eventModal').classList.toggle('is-active')
+        },
+        deleteEvent: (event) => {
+          let eventId = event.getAttribute('data-id')
+          /* post to delete-event with the id */
+          let data = { id: eventId }
+          support.postData(data, delete_event_url, (data) => {
+            let button = document.querySelector('#delete-event-' + data.id)
+            if (data.success) {
+              button.disabled = true
+              button.textContent = 'Deleted'
+              let table = document.querySelector('#events')
+              table.removeChild(document.querySelector('#event-' + data.id))
+            } else {
+              button.classList.remove('is-danger')
+              button.classList.add('is-primary')
+              button.textContent = 'Failed'
+            }
+          })
+        },
+        deleteSermon: (sermon) => {
+          // send the sermon.id up to the delete endpoint
+          let data = {
+            id: sermon.dataset.id
+          }
+          support.postData(data, delete_sermon_url, (data) => {
+            let message = document.getElementById('addSermonMessage')
+            message.classList.toggle('is-hidden')
+            message.textContent = data.message
+            setTimeout(() => {
+              document.getElementById('addSermonMessage').classList.toggle('is-hidden')
+            }, 3000)
+            var row = document.querySelector('#sermon-'+data.id)
+            row.parentNode.removeChild(row)
+          })
+        },
+        editSermon: (sermon) => {
+          // then fill out the modal input
+          let date = new Date(sermon.dataset.date).toISOString().substring(0, 10)
+          document.querySelector('#sermonId').value = sermon.dataset.id
+          document.querySelector('#sermonTitle').value = sermon.dataset.title
+          document.querySelector('#sermonVideo').value = sermon.dataset.video
+          document.querySelector('#sermonFile').value = sermon.dataset.file
+          document.querySelector('#sermonDate').value = date
+          document.querySelector('#sermonSpeaker').value = sermon.dataset.speakerId
+          document.querySelector('#sermonSeries').value = sermon.dataset.seriesId
+          document.querySelector('#sermonService').value = sermon.dataset.serviceId
+          document.querySelector('#sermonStartPassageBook').value = sermon.dataset.passageStartBook
+          document.querySelector('#sermonStartPassageChapter').value = sermon.dataset.passageStartChapter
+          document.querySelector('#sermonStartPassageVerse').value = sermon.dataset.passageStartVerse
+          document.querySelector('#sermonEndPassageBook').value = sermon.dataset.passageEndBook
+          document.querySelector('#sermonEndPassageChapter').value = sermon.dataset.passageEndChapter
+          document.querySelector('#sermonEndPassageVerse').value = sermon.dataset.passageEndVerse
+          // pop the modal
+          document.querySelector('#sermonModal').classList.toggle('is-active')
+        },
+        clearSermon: () => {
+          document.querySelector('#sermonId').value = ''
+          document.querySelector('#sermonTitle').value = ''
+          document.querySelector('#sermonDate').value = ''
+          document.querySelector('#sermonFile').value = ''
+          document.querySelector('#sermonVideo').value = ''
+          document.querySelector('#sermonSpeaker').value = '1'
+          document.querySelector('#sermonSeries').value = '1'
+          document.querySelector('#sermonService').value = '1'
+          document.querySelector('#sermonStartPassageBook').value = '1'
+          document.querySelector('#sermonStartPassageChapter').value = ''
+          document.querySelector('#sermonStartPassageVerse').value = ''
+          document.querySelector('#sermonEndPassageBook').value = '1'
+          document.querySelector('#sermonEndPassageChapter').value = ''
+          document.querySelector('#sermonEndPassageVerse').value = ''
+        },
+      }
+
+      users.on('notification', (data) => {
+        console.log(data)
+      })
+
+      var closeModal = document.querySelectorAll('.close-modal')
+      closeModal.forEach((modal) => {
+        modal.addEventListener('click', function (e) {
+          e.preventDefault()
+          this.parentNode.parentNode.parentNode.classList.toggle('is-active')
+        })
+      })
+
+      var deleteEvents = document.querySelectorAll('.delete-event')
+      deleteEvents.forEach((events) => {
+        events.addEventListener('click', function (e) {
+          e.preventDefault()
+          // deleteEvent(this)
+          // get the element that has the class is-active
+          // remove that class from the element, add class is-hidden
+          // add is-active class to whatever the target is
+        })
+      })
+
+      /* Modals */
+      let addAuthorButton = document.querySelector('#addAuthorButton')
+      let authorModal = document.querySelector('#authorModal')
+      addAuthorButton.addEventListener('click', (e) => {
+        e.preventDefault()
+        authorModal.classList.toggle('is-active')
+      })
+
+      let addASermonButton = document.querySelector('#addASermonButton')
+      let sermonModal = document.querySelector('#sermonModal')
+      addASermonButton.addEventListener('click', (e) => {
+        e.preventDefault()
+        sermonModal.classList.toggle('is-active')
+      })
+
+      let addSpeakerButton = document.querySelector('#addSpeakerButton')
+      let speakerModal = document.querySelector('#speakerModal')
+      addSpeakerButton.addEventListener('click', (e) => {
+        e.preventDefault()
+        speakerModal.classList.toggle('is-active')
+      })
+
+      let addSeriesButton = document.querySelector('#addSeriesButton')
+      let seriesModal = document.querySelector('#seriesModal')
+      addSeriesButton.addEventListener('click', (e) => {
+        e.preventDefault()
+        seriesModal.classList.toggle('is-active')
+      })
+
+      let addServiceButton = document.querySelector('#addServiceButton')
+      let serviceModal = document.querySelector('#serviceModal')
+      addServiceButton.addEventListener('click', (e) => {
+        e.preventDefault()
+        serviceModal.classList.toggle('is-active')
+      })
+
+      let addEventButton = document.querySelector('#addEventButton')
+      let eventModal = document.querySelector('#eventModal')
+      addEventButton.addEventListener('click', (e) => {
+        e.preventDefault()
+        eventModal.classList.toggle('is-active')
+      })
+
+      let addAdminClass = document.querySelectorAll('.make-admin')
+      addAdminClass.forEach((admin) => {
+        admin.addEventListener('click', (e) => {
+          e.preventDefault()
+          let id = e.target.dataset.uuid
+          let data = { uuid: id }
+          support.postData(data, admin_url, (data) => {
+            let button = document.getElementById('make-admin-' + data.uuid)
+            if (data.success) {
+              button.disabled = true
+              button.textContent = 'Success'
+            } else {
+              button.classList.remove('is-primary')
+              button.classList.add('is-warning')
+              button.textContent = 'Failed'
+            }
+          })
+        })
+      })
+
+      let removeAdminClass = document.querySelectorAll('.remove-admin')
+      removeAdminClass.forEach((admin) => {
+        admin.addEventListener('click', (e) => {
+          e.preventDefault()
+          let id = e.target.dataset.uuid
+          let data = { uuid: id }
+          support.postData(data, remove_admin_url, (data) => {
+            let button = document.getElementById('remove-admin-' + data.uuid)
+            if (data.success) {
+              button.disabled = true
+              button.textContent = 'Success'
+            } else {
+              button.classList.remove('is-info')
+              button.classList.add('is-warning')
+              button.textContent = 'Failed'
+            }
+          })
+        })
+      })
+
+      let approveClass = document.querySelectorAll('.approve')
+      approveClass.forEach((approve) => {
+        approve.addEventListener('click', (e) => {
+          e.preventDefault()
+          let id = e.target.dataset.uuid
+          let email = e.target.dataset.email
+          let data = { uuid: id, email: email }
+          support.postData(data, approve_url, (data) => {
+            let button = document.getElementById('approve-' + data.uuid)
+            if (data.success) {
+              button.disabled = true
+              button.textContent = 'Approved'
+            } else {
+              button.classList.remove('is-primary')
+              button.classList.add('is-warning')
+              button.textContent = 'Failed'
+            }
+          })
+        })
+      })
+
+      let disapproveClass = document.querySelectorAll('.disapprove')
+      disapproveClass.forEach((disapprove) => {
+        disapprove.addEventListener('click', (e) => {
+          e.preventDefault()
+          let id = e.target.dataset.uuid
+          let email = e.target.dataset.email
+          let data = { uuid: id, email: email }
+          support.postData(data, disapprove_url, (data) => {
+            let button = document.getElementById('disapprove-' + data.uuid)
+            if (data.success) {
+              button.disabled = true
+              button.textContent = 'Disapproved'
+              document.getElementById('addUserMessage').innerText = data.message
+              document.getElementById('addUserMessage').classList.toggle('is-hidden')
+            } else {
+              button.classList.remove('is-primary')
+              button.classList.add('is-warning')
+              button.textContent = 'Failed'
+            }
+          })
+        })
+      })
+
+      let submitNotification = document.querySelector('#submitNotification')
+      submitNotification.addEventListener('click', (e) => {
+        e.preventDefault()
+        let notification = {
+          message: document.querySelector('#notification').value
+        }
+        support.postData(notification, email_users_url, (data) => {
+          var notification = document.querySelector('#notification').value
+          var message = JSON.parse(data)
+          if (message.notification === notification) {
+            document.querySelector('#notificationMessage').innerText = 'Successfully sent the Notification.'
+          } else {
+            document.querySelector('#notificationMessage').innerText = 'Error sending the Notification.'
+          }
+        })
+        users.emit('new-notification', JSON.stringify({ notification: notification }))
+      })
+
+      let submitVideo = document.querySelector('#submitVideo')
+      submitVideo.addEventListener('click', (e) => {
+        e.preventDefault()
+        let url = document.querySelector('#url').value
+        let tag = document.querySelector('#tag').value
+        let livestream = document.querySelector('#livestream').checked
+        let priv = document.querySelector('#videoPrivate').checked
+        let data = { url: url, tag: tag, livestream: livestream, private: priv }
+        support.postData(data, add_video_url, (data) => {
+          let message = document.getElementById('addVideoMessage')
+          message.classList.toggle('is-hidden')
+          message.textContent = data.message
+          setTimeout(() => {
+            document.getElementById('addVideoMessage').classList.toggle('is-hidden')
+          }, 3000)
+        })
+      })
+
+      let submitSermon = document.querySelector('#submitSermon')
+      submitSermon.addEventListener('click', (e) => {
+        e.preventDefault()
+        // speaker, service, sermon, startBook, startChapter, startVerse, endBook, endChapter, endVerse
+        let data = {
+          // add id if exits
+          id: (document.querySelector('#sermonId').value) ? document.querySelector('#sermonId').value : null,
+          sermonTitle: document.querySelector('#sermonTitle').value,
+          sermonDate: document.querySelector('#sermonDate').value,
+          sermonFile: document.querySelector('#sermonFile').value,
+          sermonVideo: document.querySelector('#sermonVideo').value,
+          sermonSpeaker: document.querySelector('#sermonSpeaker').value,
+          sermonSeries: document.querySelector('#sermonSeries').value,
+          sermonService: document.querySelector('#sermonService').value,
+          sermonStartPassageBook: document.querySelector('#sermonStartPassageBook').value,
+          sermonStartPassageChapter: document.querySelector('#sermonStartPassageChapter').value,
+          sermonStartPassageVerse: document.querySelector('#sermonStartPassageVerse').value,
+          sermonEndPassageBook: document.querySelector('#sermonEndPassageBook').value,
+          sermonEndPassageChapter: document.querySelector('#sermonEndPassageChapter').value,
+          sermonEndPassageVerse: document.querySelector('#sermonEndPassageVerse').value,
+        }
+        // add_sermon_url needs to either update or add based on if there is an Id in the post body
+        support.postData(data, add_sermon_url, (data) => {
+          sermonModal.classList.toggle('is-active')
+          let message = document.getElementById('addSermonMessage')
+          message.classList.toggle('is-hidden')
+          message.textContent = data.message
+          setTimeout(() => {
+            document.getElementById('addSermonMessage').classList.toggle('is-hidden')
+          }, 3000)
+          support.clearSermon()
+          let updateData = {
+            startId: parseInt(document.querySelector('#firstSermon').value) + 2,
+          }
+          support.postData(updateData, '/get-sermons-manage', (response) => {
+            //document.querySelector('#sermonError').innerHTML = ''
+            document.querySelector('#sermons').innerHTML = response.html
+            document.querySelector('#lastSermon').value = response.sermons.lastId
+            document.querySelector('#firstSermon').value = response.sermons.firstId
+          })
+        })
+      })
+
+      /* Add A Author functionality */
+      let submitAuthor = document.querySelector('#submitAuthor')
+      submitAuthor.addEventListener('click', (e) => {
+        e.preventDefault()
+        let addAuthorFirstName = document.querySelector('#addAuthorFirstName').value
+        let addAuthorLastName = document.querySelector('#addAuthorLastName').value
+        if (!addAuthorFirstName) {
+          // Tell the user to get their act together
+        }
+        if (!addAuthorLastName) {
+          // Tell the user to get their act together
+        }
+        if (addAuthorFirstName && addAuthorLastName) {
+          // Tell the user to get their act together
+
+          let data = {
+            first_name: addAuthorFirstName,
+            last_name: addAuthorLastName,
+          }
+          support.postData(data, add_author_url, (data) => {
+            var readingAuthor = document.querySelector('#readingAuthor')
+            var option = document.createElement('option')
+            option.value = data.id
+            option.textContent = addAuthorFirstName + ' ' + addAuthorLastName
+            readingAuthor.appendChild(option)
+            authorModal.classList.toggle('is-active')
+          })
+        }
+      })
+
+      let submitReading = document.querySelector('#submitReading')
+      submitReading.addEventListener('click', (e) => {
+        e.preventDefault()
+        // Check Info
+
+        // Grab the information
+        let postData = {
+          authors_id: document.querySelector('#readingAuthor').value,
+          title: document.querySelector('#readingTitle').value,
+          link: document.querySelector('#readingLink').value,
+        }
+        // Post to the info to the db
+        if (postData.authors_id && postData.title && postData.link) {
+          support.postData(postData, add_reading_url, (data) => {
+            if (data.success) {
+              document.querySelector('#readingMessage').innerText = data.message
+              document.querySelector('#readingTitle').value = ''
+              document.querySelector('#readingLink').value = ''
+              setTimeout(() => {
+                document.querySelector('#readingMessage').innerText = ''
+              }, 3000)
+            }
+          })
+        }
+      })
+
+      /* Add A Speaker functionality */
+      let submitSpeaker = document.querySelector('#submitSpeaker')
+      submitSpeaker.addEventListener('click', (e) => {
+        e.preventDefault()
+        let addSpeakerFirstName = document.querySelector('#addSpeakerFirstName').value
+        let addSpeakerLastName = document.querySelector('#addSpeakerLastName').value
+        if (!addSpeakerFirstName) {
+          // Tell the user to get their act together
+        }
+        if (!addSpeakerLastName) {
+          // Tell the user to get their act together
+        }
+        if (addSpeakerFirstName && addSpeakerLastName) {
+          // Tell the user to get their act together
+
+          let data = {
+            first_name: addSpeakerFirstName,
+            last_name: addSpeakerLastName,
+          }
+          support.postData(data, add_speaker_url, (data) => {
+            var sermonSpeaker = document.querySelector('#sermonSpeaker')
+            var option = document.createElement('option')
+            option.value = data.id
+            option.textContent = addSpeakerFirstName + ' ' + addSpeakerLastName
+            sermonSpeaker.appendChild(option)
+            speakerModal.classList.toggle('is-active')
+          })
+        }
+      })
+
+      /* Add Series functionality */
+      let submitSeries = document.querySelector('#submitSeries')
+      submitSeries.addEventListener('click', (e) => {
+        e.preventDefault()
+        let addSeriesName = document.querySelector('#addSeriesName').value
+        if (!addSeriesName) {
+          // Tell the user to get their act together
+        } else {
+          let data = {
+            name: addSeriesName,
+          }
+          support.postData(data, add_series_url, (data) => {
+            var sermonSeries = document.querySelector('#sermonSeries')
+            var option = document.createElement('option')
+            option.value = data.id
+            option.textContent = addSeriesName
+            sermonSeries.appendChild(option)
+            seriesModal.classList.toggle('is-active')
+          })
+        }
+      })
+
+      /* Add Service Functionality */
+      let submitService = document.querySelector('#submitService')
+      submitService.addEventListener('click', (e) => {
+        e.preventDefault()
+        let addServiceName = document.querySelector('#addServiceName').value
+        let addServiceTime = document.querySelector('#addServiceTime').value
+        if (!addServiceName) {
+          // if addServiceName !== null && addServiceName !== undefined
+          // Tell the user to get their act together
+        }
+        if (!addServiceTime) {
+          // Tell the user to get their act together
+        }
+        if (addServiceName && addServiceTime) {
+          let data = {
+            name: addServiceName,
+            time: addServiceTime,
+          }
+          support.postData(data, add_service_url, (data) => {
+            var sermonService = document.querySelector('#sermonService')
+            var option = document.createElement('option')
+            option.value = data.id
+            option.textContent = addServiceName
+            sermonService.appendChild(option)
+            serviceModal.classList.toggle('is-active')
+          })
+        }
+      })
+
+      /* Add Event */
+      let submitEvent = document.querySelector('#submitEvent')
+      submitEvent.addEventListener('click', (e) => {
+        e.preventDefault()
+        let eventId = document.querySelector('#eventId').value
+        let eventTitle = document.querySelector('#eventTitle').value
+        let eventDate = document.querySelector('#eventDate').value
+        let eventStartTime = document.querySelector('#eventStartTime').value
+        let eventEndTime = document.querySelector('#eventEndTime').value
+        let eventPrivate = document.querySelector('#eventPrivate').checked
+        let newEvent = true
+        //let eventPrivate = document.querySelector('#eventPrivate').value
+        if (!eventTitle) {
+          // Tell the user to get their act together
+        }
+        if (!eventDate) {
+          // Tell the user to get their act together
+        }
+        if (!eventStartTime) {
+          // Tell the user to get their act together
+        }
+        if (!eventEndTime) {
+          // Tell the user to get their act together
+        }
+        if (eventTitle && eventDate && eventStartTime && eventEndTime) {
+          let data = {
+            title: eventTitle,
+            date: eventDate,
+            start_time: eventStartTime,
+            end_time: eventEndTime,
+            is_member_private: eventPrivate
+          }
+          if (eventId !== '') {
+            data.id = eventId
+            newEvent = false
+          }
+          support.postData(data, add_event_url, (data) => {
+            if (data.id && !newEvent) {
+              var selector = '#event-' + data.id + '-title'
+              document.querySelector(selector).textContent = data.title
+              selector = '#event-' + data.id + '-date'
+              document.querySelector(selector).textContent = data.date
+              selector = '#event-' + data.id + '-start-time'
+              document.querySelector(selector).textContent = data.start_time
+              selector = '#event-' + data.id + '-end-time'
+              document.querySelector(selector).textContent = data.end_time
+              selector = '#event-' + data.id + '-is-private'
+              document.querySelector(selector).textContent = data.is_member_private ? 'Yes' : 'No'
+              selector = '#modify-event-'+data.id
+              var editButton = document.querySelector(selector)
+              editButton.dataset.title = data.title
+              editButton.dataset.date = data.date
+              editButton.dataset.startTime = data.start_time
+              editButton.dataset.endTime = data.end_time
+              editButton.dataset.isMemberPrivate = data.is_member_private
+              document.querySelector('#eventId').value = ''
+              document.querySelector('#eventTitle').value = ''
+              document.querySelector('#eventDate').value = ''
+              document.querySelector('#eventStartTime').value = ''
+              document.querySelector('#eventEndTime').value = ''
+              document.querySelector('#eventPrivate').value = ''
+              document.getElementById('addEventMessage').textContent = data.message
+            } else {
+              let date = new Date(eventDate)
+              document.getElementById('addEventMessage').textContent = data.message
+              let eventsTable = document.querySelector('#events')
+              let newRow = eventsTable.insertRow(-1)
+              newRow.id = 'event-' + data.id
+              let titleCell = newRow.insertCell(0)
+              titleCell.innerHTML = eventTitle
+              let dateCell = newRow.insertCell(1)
+              dateCell.innerHTML = date.getMonth() + '-' + date.getDate() + '-' + date.getFullYear()
+              let startTimeCell = newRow.insertCell(2)
+              startTimeCell.innerHTML = eventStartTime
+              let endTimeCell = newRow.insertCell(3)
+              endTimeCell.innerHTML = eventEndTime
+              let endPrivateCell = newRow.insertCell(4)
+              endPrivateCell.innerHTML = (eventPrivate) ? 'Yes' : 'No'
+              let deleteEventButton = document.createElement('button')
+              deleteEventButton.classList.add('button', 'is-danger', 'delete-event')
+              deleteEventButton.setAttribute('data-id', data.id)
+              deleteEventButton.id = 'delete-event-' + data.id
+              deleteEventButton.innerText = 'Delete'
+              deleteEventButton.onclick = (event) => {
+                support.deleteEvent(event.srcElement)
+              }
+              let deleteButtonCell = newRow.insertCell(5)
+              deleteButtonCell.appendChild(deleteEventButton)
+            }
+            eventModal.classList.toggle('is-active')
+          })
+        }
+      })
+
+      /* Split out the Registration js to a sub js file. Include if permissions allow it. */
+
+      /*let submitReg = document.querySelector('#submitReg')
+      submitReg.addEventListener('click', (e) => {
+        e.preventDefault()
+        let data = JSON.stringify({
+          'regType': document.querySelector('#regType').value,
+          'regDate': regDate,
+          'regNum': document.querySelector('#regNum').value
+        })
+        let fetchData = {
+          method: 'POST',
+          body: data,
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }
+        fetch(add_registration_url, fetchData)
+          .then((resp) => resp.json())
+          .then((data) => {
+            //let id = parseInt(data.id)
+            let message = document.querySelector('#addRegistrationMessage')
+            message.classList.remove('is-hidden')
+            message.classList.add('is-visible')
+            message.textContent = data.message
+          })
+      })*/
+      // Initialize all input of type date
+
+    </script>
+  </body>
+</html>

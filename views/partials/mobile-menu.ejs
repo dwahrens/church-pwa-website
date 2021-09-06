@@ -1,0 +1,48 @@
+<nav class="navbar is-dark is-fixed-bottom" role="navigation" aria-label="main navigation">
+  <div id="navMenu" class="navbar-brand navbar-center bottom-menu">
+    <a class="navbar-item is-expanded add-navbar-spacing is-block has-text-centered has-text-white <% if (page == 'livestream') { %>is-active<% } %>"
+      href="/public/livestream">
+      <img class="is-white-icon image is-centered is-bottom-nav-image" src="/public/icons/svg/live.svg" alt="Live Stream" />
+      <p class="is-size-7-mobile is-size-6-tablet is-size-6-desktop">Live Stream</p>
+    </a>
+    <!-- Check if user is approved -->
+    <a class="navbar-item is-expanded add-navbar-spacing is-block has-text-centered has-text-white <% if (page == 'sermons') { %>is-active<% } %>"
+      href="/public/sermons">
+      <img class="is-white-icon image is-centered is-bottom-nav-image" src="/public/icons/svg/sermon.svg" alt="Sermons" />
+      <p class="is-size-7-mobile is-size-6-tablet is-size-6-desktop">Sermons</p>
+    </a>
+    <% if (authorized) { %>
+    <a class="navbar-item is-expanded add-navbar-spacing is-block has-text-centered has-text-white <% if (page === 'prayer-requests') { %>is-active<% } %>"
+      href="/public/prayer-requests">
+      <img class="is-white-icon image is-centered is-bottom-nav-image" src="/public/icons/svg/prayer.svg"
+        alt="Prayer Requests" />
+      <p class="is-size-7-mobile is-size-6-tablet is-size-6-desktop">Prayer Requests</p>
+    </a>
+    <% } else { %>
+      <% if (loggedIn) { %>
+      <a class="navbar-item is-expanded add-navbar-spacing is-block has-text-centered has-text-white" href="/public/user-profile">
+        <img class="is-white-icon image is-centered is-bottom-nav-image" src="/public/icons/svg/account.svg"
+          alt="Settings" /> 
+          <p class="is-size-7-mobile is-size-6-tablet is-size-6-desktop">Profile</p>
+      </a>
+      <% } else { %>
+      <a class="navbar-item is-expanded add-navbar-spacing is-block has-text-centered has-text-white" href="/public/login">
+        <img class="is-white-icon image is-centered is-bottom-nav-image" src="/public/icons/svg/account.svg"
+          alt="Login" />
+        <p class="is-size-7-mobile is-size-6-tablet is-size-6-desktop">Login</p>
+      </a>
+      <% } %>
+    <% } %>
+    <a class="navbar-item is-expanded add-navbar-spacing is-block has-text-centered has-text-white spa" id="moreButton"
+      href="#more">
+      <img class="is-white-icon image is-centered is-bottom-nav-image" src="/public/icons/svg/more.svg" alt="More" />
+      <p class="is-size-7-mobile is-size-6-tablet is-size-6-desktop">   Menu   </p>
+    </a>
+  </div>
+</nav>
+<!--<a class="navbar-item is-expanded add-navbar-spacing is-block has-text-centered has-text-white"
+  href="<%= sundayschool.url %>">
+  <img class="is-white-icon image is-centered is-bottom-nav-image" src="/public/icons/svg/sundayschool.svg"
+    alt="Sunday School" />
+  <p class="is-size-6-mobile is-size-6-tablet is-size-6-desktop">Sunday School</p>
+</a>-->

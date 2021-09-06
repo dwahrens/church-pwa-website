@@ -1,0 +1,143 @@
+<%- include('partials/header') %>
+<section id="daily-devos" class="hero is-fullheight partial is-active <% if (!isMobile) { %>has-top-padding-notification<% } %>">
+  <article class="content is-fluid is-fullhd">
+    <div class="tile is-parent">
+      <div class="tile is-child is-light box is-vertical">
+        <h3 class="has-text-dark is-size-3 has-text-centered is-centered"><i>Daily Devotionals</i></h3>
+        <hr>
+        <% if (dailyDevoTitles.length > 0) { %>
+        <form id="dailyDevoTitles">
+          <fieldset>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="filterDaily">Daily Devotionals</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control select">
+                    <select id="filterDaily">
+                      <% dailyDevoTitles.forEach((d) => { %>
+                      <option value="<%= d.id %>"><%= d.name %></option>
+                      <% }) %>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+        <% } %>
+        <% if (dailyDevos.length > 0) { %>
+        <p id="loadingDailyDevos" class="has-text-center has-text-primary is-size-4">Loading ...</p>
+        <div id="add-daily-devos" class="is-hidden">
+          <%- include('partials/daily-devos-list') %>
+        </div>
+        <p class="is-size-5 has-text-danger" id="dailyDevosError"></p>
+        <% } else { %>
+        <p class="has-text-centered has-text-primary is-size-5">No Daily Devotionals Available</p>
+        <% } %>
+      </div>
+    </div>
+  </article>
+</section>
+<script>
+  function dailyDevos() {
+    document.querySelectorAll('.daily-devo-header').forEach((anchor) => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault()
+        let currentDailyDevo = document.querySelector('.daily-devo-video.is-active')
+        if (currentDailyDevo) {
+          currentDailyDevo.classList.remove('is-active')
+          currentDailyDevo.classList.add('is-hidden')
+        }
+        let nextDailyDevo = document.querySelector(this.getAttribute('href'))
+        document.querySelector(nextDailyDevo.dataset.videoId).src = nextDailyDevo.dataset.videoEmbedded
+        nextDailyDevo.classList.remove('is-hidden')
+        nextDailyDevo.classList.add('is-active')
+      })
+    })
+    document.querySelector('#add-daily-devos').classList.remove('is-hidden')
+    document.querySelector('#loadingDailyDevos').classList.add('is-hidden')
+    document.querySelector('#prevDevos').addEventListener('click', (e) => {
+    e.preventDefault()
+    document.querySelector('#add-daily-devos').classList.add('is-hidden')
+    document.querySelector('#loadingDailyDevos').classList.remove('is-hidden')
+    let data = {
+      daily_devo_id: Number(document.querySelector('#lastDevo').value) + 20,
+      number: 10,
+      series_id: Number(document.querySelector('#filterDaily').value)
+    }
+    postData(data, '/get-daily-devos', (response) => {
+      if (response.error) {
+        document.querySelector('#dailyDevosError').innerHTML = response.error.message
+      } else {
+        document.querySelector('#dailyDevosError').innerHTML = ''
+        document.querySelector('#add-daily-devos').innerHTML = response.html
+        dailyDevos()
+      }
+    })
+  })
+
+  document.querySelector('#nextDevos').addEventListener('click', (e) => {
+    e.preventDefault()
+    document.querySelector('#add-daily-devos').classList.add('is-hidden')
+    document.querySelector('#loadingDailyDevos').classList.remove('is-hidden')
+    let data = {
+      daily_devo_id: Number(document.querySelector('#firstDevo').value) - 10,
+      number: 10,
+      series_id: Number(document.querySelector('#filterDaily').value)
+    }
+    postData(data, '/get-daily-devos', (response) => {
+      if (response.error) {
+        document.querySelector('#dailyDevosError').innerHTML = response.error.message
+      } else {
+        document.querySelector('#dailyDevosError').innerHTML = ''
+        document.querySelector('#add-daily-devos').innerHTML = response.html
+        dailyDevos()
+      }
+    })
+  })
+  }
+
+  function postData(data, url, next) {
+    let fetchData = {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }
+    fetch(url, fetchData)
+      .then((resp) => resp.json())
+      .then((data) => {
+        //let id = parseInt(data.id)
+        next(data)
+      })
+  }
+
+  document.querySelector('#filterDaily').addEventListener('change', (e) => {
+    e.preventDefault()
+    document.querySelector('#add-daily-devos').classList.add('is-hidden')
+    document.querySelector('#loadingDailyDevos').classList.remove('is-hidden')
+    let data = {
+      daily_devo_id: e.currentTarget.value,
+    }
+    postData(data, '/get-daily-devos-by-series', (response) => {
+      //let returnData = JSON.parse(response)
+      //console.log(returnData)
+      if (response.error) {
+        document.querySelector('#dailyDevosError').innerHTML = response.error.message
+      } else {
+        document.querySelector('#dailyDevosError').innerHTML = ''
+        document.querySelector('#add-daily-devos').innerHTML = response.html
+        dailyDevos()
+      }
+    })
+  })
+
+  dailyDevos()
+</script>
+<% if (isMobile) { %>
+<%- include('partials/more') %>
+<% } %>
+<%- include('partials/footer') %>

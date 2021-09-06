@@ -1,0 +1,208 @@
+<% if (sermons.length > 0) { %>
+<div class="column">
+  <% sermons.forEach((sermon) => { %>
+  <div class="box is-grey has-text-centered">
+    <a
+      data-title="<%= sermon.title %>"
+      data-file="<%= sermon.file %>"
+      data-date="<%= sermon.date %>"
+      data-speaker="<%= sermon.speaker %>"
+      data-downloadfile="<%= sermon.downloadFile %>"
+      data-service="<%= sermon.service_name %>"
+      data-series="<%= sermon.series_name %>"
+      data-video="<%= sermon.embedded_url %>"
+      data-time="<%= sermon.time %>"
+      <% if (sermon.passage_start) { %>
+      data-passage-start-book="<%= sermon.passage_start.book %>"
+      data-passage-start-chapter="<%= sermon.passage_start.chapter %>"
+      data-passage-start-verse="<%= sermon.passage_start.verse %>"
+      <% } %>
+      <% if (sermon.passage_end) { %>
+      data-passage-end-book="<%= sermon.passage_end.book %>"
+      data-passage-end-chapter="<%= sermon.passage_end.chapter %>"
+      data-passage-end-verse="<%= sermon.passage_end.verse %>"
+      <% } %>
+      data-passage="<%= sermon.passage %>"
+      data-passagetext="<%= sermon.passageText %>"
+      data-id-class=".sermon-<%= sermon.id %>"
+      data-id="<%= sermon.id %>"
+      href="#sermon-<%= sermon.id %>"
+      class="is-size-3 sermon"
+      ><%= sermon.title %></a
+    >
+    <% if(sermon.speaker) { %>
+    <p class="is-size-4 is-bold"><%= sermon.speaker %> <% if(sermon.date) { %> - <%= sermon.date %> <% } %></p>
+    <% } %> <% if(sermon.passage_start_id && sermon.passage_end_id) { %>
+    <p class="is-italic">
+      <%= sermon.passage_start.book_name + ' ' + sermon.passage_start.chapter + ':' + sermon.passage_start.verse + ' - ' + sermon.passage_end.book_name + ' ' +
+      sermon.passage_end.chapter + ':' + sermon.passage_end.verse %>
+    </p>
+    <% } %>
+    <div id="sermon-<%= sermon.id %>" class="sermon-details is-hidden">
+      <p class="is-size-5 is-italic">
+        Part of the <span id="sermonSeries" class="is-uppercase"><%= sermon.series_name %></span> series, preached at a
+        <span id="sermonService" class="is-uppercase"><%= sermon.service_name %></span>
+        service.
+      </p>
+      <!-- Remember to uncomment the sermon.file!!!! -->
+      <audio id="sermonAudio-<%= sermon.id %>" src="<%= sermon.file %>" crossorigin="anonymous" preload="metadata">
+        Your browser does not support the <code>audio</code> element.
+      </audio>
+      <div class="has-top-padding">
+        <a id="downloadSermon" href="<%= sermon.downloadFile %>" download="<%= sermon.downloadFile %>" class="button is-primary is-medium is-rounded"
+          >Download Audio</a
+        >
+      </div>
+      <div class="video-responsive sermon-video-<%= sermon.id %> is-hidden">
+        <iframe
+          id="sermonVideo-<%=sermon.id %>"
+          src=""
+          frameborder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          class="is-tile-centered"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <div id="sermonPassageText" class="is-size-5 has-top-padding has-text-left">
+        <%- sermon.passageText %>
+      </div>
+    </div>
+  </div>
+  <% }) %>
+  <form target="/sermonPagination">
+    <fieldset>
+      <input type="hidden" value="<%= sermons[sermons.length-1].id %>" id="lastSermon" name="lastSermon" />
+      <input type="hidden" value="<%= sermons[0].id %>" id="firstSermon" name="firstSermon" />
+      <div class="columns">
+        <div class="column has-text-centered is-centered">
+          <input type="submit" class="button is-primary" value="Previous Sermons" id="prevSermons" />
+        </div>
+        <div class="column has-text-centered is-centered">
+          <input type="submit" class="button is-primary" value="Next Sermons" id="nextSermons" />
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>
+<script>
+  function postData(data, url, next) {
+    let fetchData = {
+      method: 'POST',
+      body: (data) ? JSON.stringify(data) : data,
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }
+    fetch(url, fetchData)
+      .then((resp) => resp.json())
+      .then((data) => {
+        //let id = parseInt(data.id)
+        next(data)
+      })
+  }
+  // sermons click event
+  function sermons() {
+    window.scrollTo(0,0)
+    document.querySelectorAll('.sermon').forEach((sermon) => {
+      sermon.addEventListener('click', function (e) {
+        e.preventDefault()
+        var sermonId = e.currentTarget.dataset.id
+        if (e.currentTarget.dataset.video && e.currentTarget.dataset.video !== '') {
+          document.querySelector('#sermonVideo-' + sermonId).src = e.currentTarget.dataset.video
+          document.querySelector('.video-responsive.sermon-video-' + sermonId).classList.remove('is-hidden')
+        }
+        //document.querySelector('#sermonAudio-' + sermonId).src = e.currentTarget.dataset.file
+
+        sermonAudio = new Plyr(document.querySelector('#sermonAudio-' + sermonId))
+        sermonAudio.on('playing', (event) => {
+          let updateData = { id: sermonId }
+          postData(updateData, '/increment-sermon-count', (results) => {})
+        })
+        let currentSermon = document.querySelector('.sermon-details.is-active')
+        if (currentSermon) {
+          currentSermon.classList.remove('is-active')
+          currentSermon.classList.add('is-hidden')
+        }
+        let nextSermon = document.querySelector(this.getAttribute('href'))
+        nextSermon.classList.remove('is-hidden')
+        nextSermon.classList.add('is-active')
+      })
+    })
+
+    document.querySelector('#prevSermons').addEventListener('click', (e) => {
+      e.preventDefault()
+      let data = {
+        startId: parseInt(document.querySelector('#firstSermon').value) + 11,
+      }
+      postData(data, '/get-sermons', (response) => {
+        document.querySelector('#filterSermonError').innerHTML = ''
+        document.querySelector('#add-sermons').innerHTML = response.html
+        sermons()
+      })
+    })
+
+    document.querySelector('#nextSermons').addEventListener('click', (e) => {
+      e.preventDefault()
+      let data = {
+        startId: document.querySelector('#lastSermon').value,
+      }
+      postData(data, '/get-sermons', (response) => {
+        document.querySelector('#filterSermonError').innerHTML = ''
+        document.querySelector('#add-sermons').innerHTML = response.html
+        sermons()
+      })
+    })
+  }
+  // Sermons filter click event
+  document.querySelector('#sermonFilterButton').addEventListener('click', (e) => {
+    document.querySelector('#sermonFilter').classList.toggle('is-hidden')
+  })
+
+  document.querySelector('#submitFilter').addEventListener('click', (e) => {
+    e.preventDefault()
+    let data = {
+      filter: true,
+      preacher: document.querySelector('#filterPreacher').value !== 'null' ? document.querySelector('#filterPreacher').value : null,
+      series: document.querySelector('#filterSeries').value !== 'null' ? document.querySelector('#filterSeries').value : null,
+      keywords: document.querySelector('#filterKeywords').value,
+    }
+    document.querySelector('#add-sermons').innerHTML = ''
+    document.querySelector('#loadingSermons').classList.toggle('is-hidden')
+    postData(data, '/filter-sermons', (response) => {
+      //let returnData = JSON.parse(response)
+      //console.log(returnData)
+      if (response.error) {
+        document.querySelector('#filterSermonError').innerHTML = response.message
+      } else {
+        document.querySelector('#filterSermonError').innerHTML = ''
+        document.querySelector('#loadingSermons').classList.toggle('is-hidden')
+        document.querySelector('#add-sermons').innerHTML = response.html
+        sermons()
+      }
+    })
+  })
+
+  document.querySelector('#clearFilter').addEventListener('click', (e) => {
+    e.preventDefault()
+    document.querySelector('#filterPreacher').value = ''
+    document.querySelector('#filterSeries').value = ''
+    document.querySelector('#filterKeywords').value = ''
+    document.querySelector('#add-sermons').innerHTML = ''
+    document.querySelector('#loadingSermons').classList.toggle('is-hidden')
+    postData(null, '/clear-filter-sermons', (response) => {
+      //let returnData = JSON.parse(response)
+      //console.log(returnData)
+      if (response.error) {
+        document.querySelector('#filterSermonError').innerHTML = response.message
+      } else {
+        document.querySelector('#filterSermonError').innerHTML = ''
+        document.querySelector('#loadingSermons').classList.toggle('is-hidden')
+        document.querySelector('#add-sermons').innerHTML = response.html
+        sermons()
+      }
+    })
+  })
+
+  sermons()
+</script>
+<% } %>

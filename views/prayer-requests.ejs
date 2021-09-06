@@ -1,0 +1,369 @@
+<%- include('partials/header') %>
+<!--<section id="wednesday-evening-prayer" class="is-fullheight partial is-active">
+  <article id="wednesdayEveningPrayerSection" class="content is-centered is-fluid is-fullhd">
+    <div class="tile is-parent">
+      <div class="tile is-child is-light box is-vertical">
+        <h3 class="has-text-dark is-size-3 has-text-centered is-centered"><i>Wednesday Evening Prayer</i></h3>
+        <hr class="is-dark">
+        <p class="is-5 has-text-centered is-centered"><a class="button is-primary is-medium" id="wednesdayEveningPrayerLink" href="<%= wedvideo.url %>" target="_blank" rel="noreferrer">Click Here to
+            view on YouTube</a></p>
+        <p class="is-size-5 has-text-centered is-centered"><i>Please do not share this link on Social Media. Thank
+            You.</i></p>
+        <div class="video-responsive">
+          <iframe title="Wednesday Evening Video" src="<%= wedvideo.embedded_url %>?playsinline=1&fs=1"
+            frameborder="0" allow="accelerometer; autoplay; encrypted-media; picture-in-picture"
+            allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </article>
+</section>-->
+<section id="prayer-requests" class="hero is-fullheight partial is-active <% if (!isMobile) { %>has-top-padding-notification<% } %>">
+  <article class="content is-fluid is-fullhd">
+    <div class="tile is-parent">
+      <div class="tile is-child box is-light is-vertical">
+        <h3 class="has-text-dark is-size-3 has-text-centered is-centered"><i>Prayer Requests</i></h3>
+        <div class="columns">
+          <div class="column">
+            <p class="is-size-5 has-text-centered is-centered"><button id="addPrayerRequestButton" class="button is-primary">Add a Prayer Request</button></p>
+          </div>
+        </div>
+        <form id="addPrayerRequestForm" class="prayer-request-form is-12">
+          <hr class="is-dark" />
+          <fieldset>
+            <input name="prUuid" id="prUuid" type="hidden" value="<%- user.uuid %>"/>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="prFirstName">First Name: </label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" name="prFirstName" id="prFirstName" type="text" placeholder="First Name" value="<%= user.first_name %>" required />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="prLastName">Last Name: </label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" name="prLastName" id="prLastName" type="text" placeholder="Last Name" value="<%= user.last_name %>" required />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="prayerRequest">Prayer Request: </label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <textarea class="textarea" placeholder="Enter your Prayer Request." id="prayerRequest" name="prayerRequest" required></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="prPrivate">Private Request ?</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <label class="radio">
+                      <input type="radio" id="prYes" name="prPrivate" />
+                      Yes
+                    </label>
+                    <label class="radio">
+                      <input type="radio" id="prNo" name="prPrivate" checked />
+                      No
+                    </label>
+                  </div>
+                  <div class="hidden privateWarning" id="privatePRWarning">
+                    <p class="subtitle is-5 has-text-danger">Prayer requests marked <b>private</b> will not appear on this page.</p>
+                    <p class="subtitle is-6 has-text-danger"><i>They will only be shared with the Pastors.</i></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="has-text-centered is-centered"><button id="submitPrayerRequest" class="button is-info">Send</button></div>
+          </fieldset>
+        </form>
+        <div id="prResponse" class="prayer-request-response has-text-centered">
+          <p class="is-success is-size-5" id="prMessage"></p>
+        </div>
+        <!-- Load Intial Prayer Requests -->
+      </div>
+    </div>
+    <% if (pr) { %>
+    <div id="prayerRequests">
+      <%- include('partials/prayer-requests-list') %>
+      <span id="lastElement"></span>
+      <p class="has-text-centered has-bottom-margin"><button class="button is-primary is-size-5 has-text-centered" id="nextPagePR">Load More</button></p>   
+    </div>
+    <% } %>
+    <p id="noMorePR" class="is-hidden is-size-4 has-text-white-ter has-text-centered">No more Prayer Requests to load!</p>
+  </article>
+</section>
+<script>
+  const prayerUrl = window.location.origin + '/prayer-io'
+  const prayer = io.connect(prayerUrl)
+  const privateWarning = document.querySelector('#privatePRWarning')
+  const pr = document.querySelector('#prayerRequests')
+  const lastElement = document.querySelector('#lastElement')
+  
+  prayer.on('add-pr', (data) => {
+    if (data) {
+      var prayerRequests = JSON.parse(data)
+      if (prayerRequests.no_requests) {
+        document.getElementById('noMorePR').classList.toggle('is-hidden')
+      } else {
+        var parsedHTML = new DOMParser().parseFromString(prayerRequests.html, 'text/html')
+        pr.insertBefore(parsedHTML.body.firstElementChild, lastElement)
+        pr.insertBefore(parsedHTML.body.lastElementChild, lastElement)
+      }
+    }
+  })
+
+  prayer.on('reload-pr', (data) => {
+    if (data) {
+      var prayerRequests = JSON.parse(data)
+      if (prayerRequests && prayerRequests.getData) {
+        let confirm = null
+        if (prayerRequests.uuid !== document.querySelector('#prUuid').value)
+          confirm = window.confirm('Prayer Requests have been added or modified, would you like to load them?')
+        if (confirm || prayerRequests.uuid === document.querySelector('#prUuid').value) {
+          let fetchData = {
+            method: 'POST',
+            body: '',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }
+          fetch('/get-pr', fetchData)
+            .then((resp) => resp.json())
+            .then((data) => {
+              if (data && data.html) {
+                document.querySelectorAll('.prayer-requests').forEach(p => { p.remove() })
+                var parsedHTML = new DOMParser().parseFromString(data.html, 'text/html')
+                pr.insertBefore(parsedHTML.body.firstElementChild, lastElement)
+                pr.insertBefore(parsedHTML.body.lastElementChild, lastElement)
+              }
+            })
+        }
+      } else {
+        document.getElementById('noMorePR').classList.toggle('is-hidden')
+      }
+    } else {
+      document.getElementById('noMorePR').classList.toggle('is-hidden')
+    }
+  })
+
+
+  var prYes = document.querySelector('#prYes')
+  prYes.addEventListener('click', function (e) {
+    e.preventDefault()
+    if (this.checked) {
+      privateWarning.classList.remove('hidden')
+      privateWarning.classList.add('is-visible')
+    }
+  })
+
+  var prNo = document.querySelector('#prNo')
+  prNo.addEventListener('click', function (e) {
+    e.preventDefault()
+    if (this.checked) {
+      privateWarning.classList.remove('is-visible')
+      privateWarning.classList.add('hidden')
+    }
+  })
+
+  var prayerRequestButton = document.querySelector('#addPrayerRequestButton')
+  prayerRequestButton.addEventListener('click', function (e) {
+    e.preventDefault()
+    // Need to query the server for user information and pre-fill.
+    document.querySelector('#addPrayerRequestForm').classList.toggle('is-visible')
+    prayerRequestButton.textContent = 'Hide'
+  })
+
+  function editPrayerRequest(event) {
+    event.classList.toggle('hidden')
+    let id = event.getAttribute('data-id')
+    let uuid = event.getAttribute('data-uuid')
+    document.getElementById(id + '-' + uuid).classList.toggle('is-visible')
+  }
+
+  function prayingForRequest(button) {
+    button.classList.toggle('hidden')
+    let id = button.getAttribute('data-id')
+    let uuid = button.getAttribute('data-uuid')
+    let postData = {
+      id: parseInt(id),
+      uuid: uuid
+    }
+    let fetchData = {
+      method: 'POST',
+      body: JSON.stringify(postData),
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }
+    fetch('/praying-for-request', fetchData)
+      .then((resp) => resp.json())
+      .then((data) => {
+        if (data.success === true && data.interactions.length > 0) {
+          document.getElementById(id + '-show-interaction').classList.toggle('hidden')
+          var interactionButtons = document.querySelectorAll('.interaction-buttons')
+          var interactionParagraph = document.getElementById(id + '-interaction-content')
+          interactionParagraph.innerText = '' 
+          data.interactions.forEach((pri, i) => {
+            interactionParagraph.innerText += pri.first_name + ' ' + pri.last_name
+            if (data.interactions.length !== i + 1) { 
+              interactionParagraph.innerText += ', ' 
+            } else {
+              document.getElementById(id + '-interaction').classList.toggle('hidden')
+            }
+          })
+          if (interactionButtons.length > 0) {
+            interactionButtons.forEach(button => { button.classList.toggle('hidden') })
+          }
+        }
+      })
+  }
+
+  function showPraying(button) {
+    button.classList.toggle('hidden')
+    let id = button.getAttribute('data-id')
+    document.getElementById(id+'-interaction').classList.toggle('hidden')
+    document.getElementById(id+'-hide-interaction').classList.toggle('hidden')
+  }
+
+  function hidePraying(button) {
+    button.classList.toggle('hidden')
+    let id = button.getAttribute('data-id')
+    document.getElementById(id+'-interaction').classList.toggle('hidden')
+    document.getElementById(id+'-show-interaction').classList.toggle('hidden')
+  }
+
+  function deletePrayerRequest(button) {
+    button.classList.toggle('hidden')
+    let id = button.getAttribute('data-id')
+    let uuid = button.getAttribute('data-uuid')
+    let postData = {
+      id: parseInt(id),
+      uuid: uuid
+    }
+    let fetchData = {
+      method: 'POST',
+      body: JSON.stringify(postData),
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }
+    fetch('/delete-pr', fetchData)
+      .then((resp) => resp.json())
+      .then((data) => {
+        var message = document.getElementById('prMessage')
+        message.textContent = data.message
+        document.querySelector('#prResponse').classList.toggle('is-visible')
+        document.getElementById(id).remove()
+      })
+  }
+
+  function updatePrayerRequest(event, e) {
+    e.preventDefault()
+    let id = event.getAttribute('data-id')
+    let uuid = event.getAttribute('data-uuid')
+    document.getElementById(id + '-' + uuid).classList.toggle('is-visible')
+    // Clear the form fields
+    document.getElementById(id + '-' + uuid + '-edit').classList.toggle('is-visible')
+    let request = document.getElementById(id + '-' + uuid + '-request').value
+    let postData = {
+      id: parseInt(id),
+      request: request.replace(/\n\r?/g, '<br />'),
+      uuid: uuid
+    }
+    let fetchData = {
+      method: 'POST',
+      body: JSON.stringify(postData),
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }
+    fetch('/update-pr', fetchData)
+      .then((resp) => resp.json())
+      .then((data) => {
+        var message = document.getElementById('prMessage')
+        message.textContent = data.message
+        document.querySelector('#prResponse').classList.toggle('is-visible')
+        document.getElementById(id + '-' + uuid + '-edit').classList.toggle('is-visible')
+        document.getElementById(id + '-request').innerHTML = request
+      })
+  }
+
+  var submitPrayerRequest = document.getElementById('submitPrayerRequest')
+  submitPrayerRequest.addEventListener('click', function (e) {
+    e.preventDefault()
+    let is_private = getPrayerRequestPrivate()
+    // TO DO: Add checking to ensure that all of the elements are filled in.
+    let postData = {
+      uuid: document.getElementById('prUuid').value,
+      fname: document.getElementById('prFirstName').value,
+      lname: document.getElementById('prLastName').value,
+      pr: document.getElementById('prayerRequest').value.replace(/\n\r?/g, '<br />'),
+      is_private: is_private,
+    }
+    let fetchData = {
+      method: 'POST',
+      body: JSON.stringify(postData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+    fetch('/add-pr', fetchData)
+      .then((resp) => resp.json())
+      .then((data) => {
+        var message = document.getElementById('prMessage')
+        message.textContent = data.message
+        document.querySelector('#prResponse').classList.toggle('is-visible')
+        document.querySelector('#addPrayerRequestForm').classList.toggle('is-visible')
+        // Clear the form fields
+        document.querySelector('#prayerRequest').value = ''
+        prayerRequestButton.textContent = 'Add a Prayer Request'
+      })
+  })
+
+  var nextPagePR = document.querySelector('#nextPagePR')
+  nextPagePR.addEventListener('click', function (e) {
+    e.preventDefault()
+    var currentPR = document.querySelector('#prayerRequests')
+    var trs = currentPR.querySelectorAll('.prayer-request')
+    var uuid = document.querySelector('#prUuid').value
+    var lastId = trs.length - 1
+    var startingRequest = parseInt(trs[lastId].id.substring(trs[lastId].id.lastIndexOf('-') + 1, trs[lastId].id.length))
+    if (startingRequest == undefined) {
+      startingRequest = 0
+    }
+    prayer.emit('pr-pagination', JSON.stringify({ morePrayerRequests: true, startingRequest: startingRequest, numberOfRequests: 8, user: { uuid: uuid } }))
+  })
+
+  function getPrayerRequestPrivate() {
+    var prPrivate = document.getElementsByName('prPrivate'),
+      res = false
+    prPrivate.forEach((pr) => {
+      if (pr.id === 'prYes' && pr.checked) {
+        res = true
+      }
+    })
+    return res
+  }
+</script>
+<% if (isMobile) { %>
+<%- include('partials/more') %>
+<% } %>
+<%- include('partials/footer') %>

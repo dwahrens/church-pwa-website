@@ -1,0 +1,32 @@
+<%- include('partials/header') %>
+<!-- apparently gotta go through and add if else for each video instance-->
+<section id="livestream" class="hero is-fullheight partial is-active <% if (!isMobile) { %>has-top-padding-notification<% } %>">
+  <!-- Wednesday evening prayer Tile. Load from DB. Table with Expand. -->
+  <article class="content is-fluid is-fullhd">
+    <div class="tile is-parent">
+      <div class="tile is-child is-light box is-vertical">
+        <h3 class="has-text-dark is-size-3 has-text-centered is-centered"><i>Live Stream</i></h3>
+        <hr class="is-dark">
+        <% if (video) { %>
+        <p class="has-text-centered is-centered"><a class="button is-primary is-size-5 is-medium" id="livestreamLink"
+            href="<%= video.url %>" target="_blank" rel="noreferrer"><img
+              class="is-white-icon image is-centered is-bottom-nav-image has-right-margin"
+              src="/public/icons/svg/youtube.svg" width="20" height="20" />Watch on YouTube</a></p>
+        <div class="video-responsive">
+          <iframe title="Livestream Video" src="<%= video.embedded_url %>?playsinline=1&fs=1" frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; picture-in-picture" allowfullscreen>
+          </iframe>
+        </div>
+        <% } else { %>
+        <p class="has-text-primary has-text-centered is-size-5">No Livestream Available</p>
+        <% } %>
+      </div>
+      <p></p>
+    </div>
+    </div>
+  </article>
+</section>
+<% if (isMobile) { %>
+<%- include('partials/more') %>
+<% } %>
+<%- include('partials/footer') %>

@@ -1,0 +1,120 @@
+<section id="calendar"
+  class="hero is-fullheight is-fullheight partial is-active <% if (!isMobile) { %>has-top-padding-notification<% } %>">
+  <article class="content is-fluid is-fullhd">
+    <div class="tile is-parent">
+      <div class="tile is-child is-light box is-vertical">
+        <h3 class="has-text-dark is-size-3 has-text-centered is-centered"><i>
+            <%= title %>
+          </i></h3>
+        <hr class="is-dark">
+        <% if (modifyEvents) { %>
+        <div class="buttons is-centered">
+          <button class="button is-primary is-small event-button" id="addEvent">Add Event</button>
+          <button class="button is-info is-small is-hidden event-button" id="hideEventForm">Hide Form</button>
+        </div>
+        <form class="is-hidden mb-1" id="eventForm" action="/add-event" method="post">
+          <fieldset>
+            <input type="hidden" id="eventId" name="eventId" value="" />
+            <input type="hidden" id="elderEvent" name="elderEvent" value="true" />
+            <div class="field is-horizontal">
+              <div class="field-label">
+                <label for="eventTitle" class="label is-normal">Event Title</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input type="text" id="eventTitle" name="eventTitle" class="input" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label">
+                <label for="eventDate" class="label is-normal">Event Date</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input id="eventDate" name="eventDate" class="input" type="date" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label">
+                <label for="eventStartTime" class="label is-normal">Event Start Time</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input id="eventStartTime" name="eventStartTime" class="input" type="time" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label">
+                <label for="eventEndTime" class="label is-normal">Event End Time</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input id="eventEndTime" name="eventEndTime" class="input" type="time" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <input type="submit" id="submitEvent" class="button is-info is-small is-pulled-right mb-1" value="Submit Event" />
+          </fieldset>
+        </form>
+        <% } %>
+        <div class=columns>
+          <div class="column"><h4>Sunday</h4></div>
+          <div class="column"><h4>Monday</h4></div>
+          <div class="column"><h4>Tuesday</h4></div>
+          <div class="column"><h4>Wednesday</h4></div>
+          <div class="column"><h4>Thursday</h4></div>
+          <div class="column"><h4>Friday</h4></div>
+          <div class="column"><h4>Saturday</h4></div>
+        </div>
+        <!-- Dynamically Render the Calendar based on the month selected -->
+        <% month.forEach((week, wi) => { %>
+        <div class="columns" id="week-<%= wi %>">
+          <% week.forEach((day, di) => { %>
+          <div class="column calendarDates p-1" id="day-<%= di %>">
+            <div class="block">
+              <%= new Date(day).toLocaleString('en-US', { day: 'numeric' }) %>
+              <% events.forEach(event => { %>                
+                <% if (new Date(event.date).toLocaleString('en-US', { month: 'numeric', day: 'numeric' }) === new Date(day).toLocaleString('en-US', { month: 'numeric', day: 'numeric' })) { %>
+                <div class="has-background-primary-light p-1 roundedEvent" id="event-<%= event.id %>">
+                  <% if (modifyEvents) { %>
+                  <button class="button is-primary is-small event-button" id="edit-<%= event.id %>">Edit Event</button>
+                  <% } %>
+                  <p class="is-size-7"><%= event.title %>: <%= event.start_time %>-<%= event.end_time %></p>
+                  </div>
+                <% } %>
+              <% }) %>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+  </article>
+</section>
+<% if (modifyEvents) { %>
+<script>
+  let addEvent = document.querySelector('#addEvent')
+  let editEvent = document.querySelector('#editEvent')
+  let eventForm = document.querySelector('#eventForm')
+  let eventButtons = document.querySelectorAll('.event-button')
+
+  addEvent.addEventListener('click', () => {
+    eventButtons.forEach(button => {
+      button.classList.toggle('is-hidden')
+    })
+    eventForm.classList.toggle('is-hidden')
+  })
+</script>
+<% } %>

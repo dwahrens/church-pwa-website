@@ -1,0 +1,42 @@
+<form target="/sermonPagination">
+  <fieldset>
+    <input type="hidden" value="<%= lastId %>" id="lastSermon" name="lastSermon" />
+    <input type="hidden" value="<%= firstId %>" id="firstSermon" name="firstSermon" />
+    <div class="columns">
+      <div class="column has-text-centered is-centered">
+        <input type="submit" class="button is-small is-primary" value="Previous Sermons" id="prevSermons" />
+      </div>
+      <div class="column has-text-centered is-centered">
+        <input type="submit" class="button is-small is-primary" value="Next Sermons" id="nextSermons" />
+      </div>
+    </div>
+  </fieldset>
+</form>
+<script>
+  /* Sermon Pagination */
+  document.querySelector('#prevSermons').addEventListener('click', (e) => {
+    e.preventDefault()
+    let data = {
+      startId: parseInt(document.querySelector('#firstSermon').value) + 11,
+    }
+    support.postData(data, '/get-sermons-manage', (response) => {
+      //document.querySelector('#sermonError').innerHTML = ''
+      document.querySelector('#sermons').innerHTML = response.html
+      document.querySelector('#lastSermon').value = response.sermons.lastId
+      document.querySelector('#firstSermon').value = response.sermons.firstId
+    })
+  })
+
+  document.querySelector('#nextSermons').addEventListener('click', (e) => {
+    e.preventDefault()
+    let data = {
+      startId: document.querySelector('#lastSermon').value,
+    }
+    support.postData(data, '/get-sermons-manage', (response) => {
+      //document.querySelector('#sermonError').innerHTML = ''
+      document.querySelector('#sermons').innerHTML = response.html
+      document.querySelector('#lastSermon').value = response.sermons.lastId
+      document.querySelector('#firstSermon').value = response.sermons.firstId
+    })
+  })
+</script>

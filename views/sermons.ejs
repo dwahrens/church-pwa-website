@@ -1,0 +1,102 @@
+<%- include('partials/header') %>
+<section id="sermons" class="hero is-fullheight partial is-active <% if (!isMobile) { %>has-top-padding-notification<% } %>">
+  <article class="content is-fluid is-fullhd">
+    <div class="tile is-parent">
+      <div class="tile is-child is-light box is-vertical">
+        <h3 class="has-text-dark is-size-3 has-text-centered is-centered"><i>Latest Sermons</i></h3>
+        <hr>
+        <button class="button is-info has-bottom-margin" id="sermonFilterButton">Show Filter</button>
+        <div id="sermonFilter" class="columns is-hidden">
+          <div class="column is-two-thirds">
+            <form>
+              <fieldset>
+                <div class="field is-horizontal">
+                  <div class="field-label is-normal">
+                    <label class="label" for="filterPreacher">Preacher: </label>
+                  </div>
+                  <div class="field-body">
+                    <div class="field">
+                      <div class="control select">
+                        <select id="filterPreacher">
+                          <option value="null"></option>
+                          <!-- add a for each here of all of the preachers available -->
+                          <% speakers.forEach((s) => { %>
+                          <option value="<%= s.id %>"><%= s.first_name %> <%= s.last_name %></option>
+                          <% }) %>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="field is-horizontal">
+                  <div class="field-label is-normal">
+                    <label class="label" for="filterSeries">Series: </label>
+                  </div>
+                  <div class="field-body">
+                    <div class="field">
+                      <div class="control select">
+                        <select id="filterSeries" name="filterSeries">
+                          <option value="null"></option>
+                          <!-- add a filter here for the series available -->
+                          <% series.forEach((s) => { %>
+                          <option value="<%= s.id %>"><%= s.name %></option>
+                          <% }) %>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="field is-horizontal">
+                  <div class="field-label is-normal">
+                    <label class="label" for="filterKeywords">Keywords: </label>
+                  </div>
+                  <div class="field-body">
+                    <div class="field">
+                      <div class="control">
+                        <input placeholder="Justification" id="filterKeywords" name="filterKeywords" class="input"
+                          type="text" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="field is-horizontal">
+                  <div class="field-label is-normal">
+                    <label class="label" for="filterSort">Sort: </label>
+                  </div>
+                  <div class="field-body">
+                    <div class="field">
+                      <div class="control select">
+                        <select id="filterSort" name="filterSort">
+                          <option value="date" selected>Date</option>
+                          <option value="preacher">Preacher</option>
+                          <option value="title">Title</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Add ajax functionality to do the filtering -->
+                <div class="has-text-centered is-centered has-bottom-margin">
+                  <button id="submitFilter" class="button is-primary">Filter</button>
+                  <button id="clearFilter" class="button is-dark">Clear</button>
+                </div>
+              </fieldset>
+            </form>
+            <p class="is-size-5 has-text-danger" id="filterSermonError"></p>
+          </div>
+          <hr>
+        </div>
+        <p id="loadingSermons" class="has-text-center has-text-primary is-size-4 is-hidden" style="margin-left:50%;" >Loading ...</p>
+        <!-- Add Filter Here -->
+        <div id="add-sermons" class="columns">
+          <%- include('partials/sermon-list') %>
+        </div>
+        <!-- Add Pagination Here. -->
+      </div>
+    </div>
+  </article>
+</section>
+<% if (isMobile) { %>
+<%- include('partials/more') %>
+<% } %>
+<%- include('partials/footer') %>

@@ -1,0 +1,55 @@
+<% pr.forEach((prayer, index) => { %>
+  <% if (index === 0 || index === 4) { %>
+  <div class="tile is-ancestor prayer-requests">
+  <% } %>
+    <div class="tile is-parent">
+      <div id="<%= prayer.id %>" class="prayer-request tile is-child box is-light is-vertical">
+        <div class="level">
+          <div class="level-left"><h3><%- prayer.name %></h3></div>
+          <div class="level-right">
+            <div class="buttons">
+              <% if (prayer.uuid === user.uuid) { %>
+              <button id="<%= prayer.id %>-delete" data-id="<%= prayer.id %>" data-uuid="<%= prayer.uuid %>" class="is-danger is-small button" onclick="deletePrayerRequest(this)">Delete</button>
+              <button id="<%=prayer.id %>-<%=prayer.uuid %>-edit" data-id="<%= prayer.id %>" data-uuid="<%= prayer.uuid %>" data-name="<% prayer.name %>" data-date="<%= prayer.date %>" data-request="<%= prayer.request %>" class="is-info is-small button" onclick="editPrayerRequest(this)">Edit</button>
+              <% } else if (prayer.uuid !== user.uuid) { %>
+                <% if (prayer.interactions && !prayer.interactions.filter(val => val.uuid === user.uuid).length > 0) { %>
+                <button id="<%=prayer.id %>-<%=prayer.uuid %>-praying" data-id="<%= prayer.id %>" data-uuid="<%= user.uuid %>" class="is-info is-small button has-tooltip-bottom" data-tooltip="I'm Praying for this Request!" onclick="prayingForRequest(this)"><img src="/public/icons/svg/pray.svg" height="20" width="20" class="is-white-icon pr-1" alt="Praying!" /></button>
+                <% } else if (!prayer.interactions) { %>
+                <button id="<%=prayer.id %>-<%=prayer.uuid %>-praying" data-tooltip="I'm Praying for this Request!" data-id="<%= prayer.id %>" data-uuid="<%= user.uuid %>" class="is-info is-small button has-tooltip-bottom" onclick="prayingForRequest(this)"><img src="/public/icons/svg/pray.svg" height="20" width="20" class="is-white-icon pr-1" alt="Praying!"/></button>
+                <% } %>
+              <% } %>
+
+              <% if (prayer.interactions) { %>
+              <button class="interaction-buttons is-dark is-small button has-tooltip-bottom" data-tooltip="View the People praying for this Request" id="<%= prayer.id %>-show-interaction" data-id="<%= prayer.id %>" onclick="showPraying(this)"><img src="/public/icons/svg/view.svg" height="20" width="20" class="is-white-icon pr-1" alt="Show Praying Users"/></button>
+              <button class="interaction-buttons hidden is-info is-small button has-tooltip-bottom" data-tooltip="Hide the People praying for this Request" id="<%= prayer.id %>-hide-interaction" data-id="<%= prayer.id %>" onclick="hidePraying(this)"><img src="/public/icons/svg/hide.svg" height="20" width="20" class="is-white-icon pr-1" alt="Hide Praying User"/></button>
+              <% } %>
+            </div>
+          </div>
+        </div>
+        <p id="<%= prayer.id %>-interaction" class="hidden pr-interaction">
+        <% if (prayer.interactions) { %>
+          <b>Users Praying: </b><span id="<%= prayer.id %>-interaction-content"><% prayer.interactions.forEach((praying, i) => { %><%= praying.first_name %> <%= praying.last_name %><% if (prayer.interactions.length !== i + 1) { %>, <% }}) %></span>
+        <% } %>
+        </p>
+        <p><i><%- prayer.date %></i></p>
+        <p id="<%= prayer.id %>-request"><%- prayer.request %></p>
+        <form id="<%= prayer.id %>-<%= prayer.uuid %>" class="prayer-request-form is-12">
+          <fieldset>
+            <div class="field is-horizontal">
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <textarea class="textarea" placeholder="Update your Prayer Request." id="<%= prayer.id %>-<%= prayer.uuid %>-request" name="<%= prayer.id %>-<%= prayer.uuid %>-request" required></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="has-text-centered is-centered"><button class="update-prayer-request button is-primary" data-id="<%= prayer.id %>" data-uuid="<%= prayer.uuid %>" onclick="updatePrayerRequest(this, event)" class="button is-info">Update</button></div>
+          </fieldset>
+        </form>
+      </div>    
+    </div>
+  <% if (index === 3 || index === 7) { %>
+  </div>
+  <% } %>
+<% }) %>
